@@ -143,7 +143,7 @@ namespace RPGGame.PlayerNameSpace
 
             if (damage < 0) damage = 0;
 
-            TextLogger.ClearWriteTextAndWait($"{Name} blocks {enemyAttack - damage} damage and takes  {damage} .");
+            TextLogger.ClearWriteTextAndWait($"{Name} blocks {enemyAttack - damage} damage and takes {damage}.");
 
             CurrentHealth -= damage;
 
@@ -159,7 +159,7 @@ namespace RPGGame.PlayerNameSpace
 
             if (damage < 0) damage = 0;
 
-            TextLogger.ClearWriteTextAndWait($"{Name} blocks {enemyAttack - damage} damage and takes  {damage} .");
+            TextLogger.ClearWriteTextAndWait($"{Name} blocks {enemyAttack - damage} damage and takes {damage}.");
 
             CurrentHealth -= damage;
 

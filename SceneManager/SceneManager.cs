@@ -47,10 +47,10 @@ namespace RPGGame.SceneManagerNamespace
 
         }
 
-        public void PlayFightScreen(Enemy enemy)
+        public void PlayFightScreen(Enemy enemy, IGameScreen enemyScreen)
         {
-            FightScreen = new FightScreen(enemy);
-            ScreenRenderer.RenderAnimation(FightScreen);
+            var fightScreenRenderer = new FightScreenRenderer(enemy, enemyScreen);
+            fightScreenRenderer.RenderFightScreen();
         }
         public void PlayBattleWon()
         {

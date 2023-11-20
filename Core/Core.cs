@@ -29,7 +29,7 @@ namespace RPGGame.Core {
             SceneManager.PlayIntro();
 
             var spider = new Enemy(EnemyType.Rat, "Black Widow", 1);
-            var BattleManager = new BattleManager(spider, SceneManager);
+            var BattleManager = new BattleManager(spider, SceneManager, new SpiderScreen(spider));
             TextLogger.ClearWriteTextAndWait("Watch out! You're being attacked....");
             var wonBattle = BattleManager.CoreLoop();
 

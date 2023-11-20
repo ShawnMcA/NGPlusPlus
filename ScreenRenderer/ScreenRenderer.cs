@@ -1,16 +1,11 @@
 ﻿using RPGGame.GameSettingsNamespace;
 using RPGGame.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RPGGame.ScreenRendererNamespace
 {
     public static class ScreenRenderer
     {
-        private static void RenderScreen(List<string> screenRows)
+        public static void RenderScreen(List<string> screenRows)
         {
             if(screenRows.Count > GameSettings.MAX_SCREEN_ROWS)
             {
@@ -84,6 +79,60 @@ namespace RPGGame.ScreenRendererNamespace
             Console.ForegroundColor = ConsoleColor.White;
         }
 
+        public static void RenderSection(List<string> sectionRows, 
+            int startPosLeft, 
+            int startPosTop,
+            int sectionWidth,
+            int sectionHeight)
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+
+            var emptyRows = sectionHeight - sectionRows.Count;
+            var emptyRowsTop = Math.Floor((float)emptyRows / 2);
+            var emptyRowsBottom = Math.Ceiling((float)emptyRows / 2);
+            var sectionRowCurrentIndex = 0;
+
+            for (var i = 0; i < sectionHeight; i++)
+            {
+                Console.SetCursorPosition(startPosLeft, startPosTop + i);
+
+                if (emptyRowsTop > 0)
+                {
+                    Console.Write(new string(' ', sectionWidth));
+                }
+
+                else if (sectionRows.Count > 0 && sectionRowCurrentIndex != sectionRows.Count)
+                {
+                    if (sectionRows[sectionRowCurrentIndex].Length > sectionWidth)
+                    {
+                        DisplayError("ERROR: Section Row length too large for section");
+                        break;
+                    }
+
+                    var emptyChars = sectionWidth - sectionRows[sectionRowCurrentIndex].Length;
+                    var emptyCharsLeft = Math.Floor((float)emptyChars / 2);
+                    var emptyCharsRight = Math.Ceiling((float)emptyChars / 2);
+
+                    Console.Write(new string(' ', (int)emptyCharsLeft));
+
+                    Console.Write(sectionRows[sectionRowCurrentIndex]);
+
+                    Console.Write(new string(' ', (int)emptyCharsRight));
+
+                    sectionRowCurrentIndex++;
+                }
+
+                else if (emptyRowsBottom > 0)
+                {
+                    Console.Write(new string(' ', GameSettings.MAX_SCREEN_ROW_CHARS));
+
+                    emptyRowsBottom--;
+                }
+
+                Console.Write("\r\n");
+            }
+        }
+
         public static void RenderAnimation(IGameScreen screen) 
         {
             var gameScreens = screen.AnimationPackage();
@@ -91,6 +140,23 @@ namespace RPGGame.ScreenRendererNamespace
             foreach (var gameScreen in gameScreens)
             {
                 RenderScreen(gameScreen);
+
+                if (gameScreens.Count > 1)
+                    Thread.Sleep(screen.AnimationSpeed);
+            }
+        }
+
+        public static void RenderAnimation(IGameScreen screen,
+            int startPosLeft,
+            int startPosTop,
+            int sectionWidth,
+            int sectionHeight)
+        {
+            var gameScreens = screen.AnimationPackage();
+
+            foreach (var gameScreen in gameScreens)
+            {
+                RenderSection(gameScreen, startPosLeft, startPosTop, sectionWidth, sectionHeight);
 
                 if (gameScreens.Count > 1)
                     Thread.Sleep(screen.AnimationSpeed);

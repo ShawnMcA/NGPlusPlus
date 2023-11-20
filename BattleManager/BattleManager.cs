@@ -22,18 +22,20 @@ namespace RPGGame.BattleManagerNamespace
         private ICreature CurrentCreature;
 
         private SceneManager SceneManager;
+        private IGameScreen EnemyScreen;
 
-        public BattleManager(Enemy enemy, SceneManager sceneManager) 
+        public BattleManager(Enemy enemy, SceneManager sceneManager, IGameScreen enemyScreen) 
         {
             Player = Player.GetInstance();
             Enemy = enemy;
             SceneManager = sceneManager;
+            EnemyScreen = enemyScreen;
         }
 
         #region Game Loop
         public bool CoreLoop()
         {
-            SceneManager.PlayFightScreen(Enemy);
+            SceneManager.PlayFightScreen(Enemy, EnemyScreen);
             SetTurnOrder();
 
             do
@@ -91,7 +93,7 @@ namespace RPGGame.BattleManagerNamespace
 
         private void EndOfTurnActions()
         {
-            SceneManager.PlayFightScreen(Enemy);
+            SceneManager.PlayFightScreen(Enemy, EnemyScreen);
             CurrentCreature = null;
             CheckForDeath();
         }
