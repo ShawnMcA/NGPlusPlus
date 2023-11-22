@@ -1,6 +1,6 @@
 using System;
 
-namespace RPGGame.Core
+namespace NGPlusPlus.Core
 {
     public static class SaveManager
     {

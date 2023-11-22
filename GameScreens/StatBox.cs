@@ -1,9 +1,9 @@
-﻿using RPGGame.Core;
-using RPGGame.EnemyNamespace;
-using RPGGame.Interfaces;
-using RPGGame.PlayerNameSpace;
+﻿using NGPlusPlus.Core;
+using NGPlusPlus.EnemyNamespace;
+using NGPlusPlus.Interfaces;
+using NGPlusPlus.PlayerNameSpace;
 
-namespace RPGGame.GameScreensNamespace
+namespace NGPlusPlus.GameScreensNamespace
 {
     internal class StatBox : IGameScreen
     {
@@ -28,13 +28,13 @@ namespace RPGGame.GameScreensNamespace
             var screen = new List<string>();
 
             /*========================================================*/
-            screen.Add(String.Format(@"  HP:    {0}/{1}{2}"          , Player.CurrentHealth,       Player.MaxHealth,    Utilities.SpaceBuilder(Player.CurrentHealth,       Player.MaxHealth,     1, 21)));
-            screen.Add(String.Format(@"  MP:    {0}/{1}{2}"          , Player.CurrentMana,         Player.MaxMana,      Utilities.SpaceBuilder(Player.CurrentMana,         Player.MaxMana,       1, 21)));
-            screen.Add(String.Format(@"  ATK:   {0}/{1}{2}"          , Player.CurrentAttack,       Player.Attack,       Utilities.SpaceBuilder(Player.CurrentAttack,       Player.Attack,        1, 21)));
-            screen.Add(String.Format(@"  DEF:   {0}/{1}{2}"          , Player.CurrentDefense,      Player.Defense,      Utilities.SpaceBuilder(Player.CurrentDefense,      Player.Defense,       1, 21)));
-            screen.Add(String.Format(@"  MATK:  {0}/{1}{2}"          , Player.CurrentMagicAttack,  Player.MagicAttack,  Utilities.SpaceBuilder(Player.CurrentMagicAttack,  Player.MagicAttack,   1, 21)));
-            screen.Add(String.Format(@"  MDEF:  {0}/{1}{2}"          , Player.CurrentMagicDefense, Player.MagicDefense, Utilities.SpaceBuilder(Player.CurrentMagicDefense, Player.MagicDefense,  1, 21)));
-            screen.Add(String.Format(@"  SPD:   {0}/{1}{2}"          , Player.CurrentSpeed,        Player.Speed,        Utilities.SpaceBuilder(Player.CurrentSpeed,        Player.Speed,         1, 21)));
+            screen.Add(String.Format(@"  HP:    {0}/{1}{2}"          , Player.Stats.Health.Current, Player.Stats.Health.Max, Utilities.SpaceBuilder(Player.Stats.Health.Current, Player.Stats.Health.Max, 1, 21)));
+            screen.Add(String.Format(@"  MP:    {0}/{1}{2}"          , Player.Stats.Mana.Current, Player.Stats.Mana.Max, Utilities.SpaceBuilder(Player.Stats.Mana.Current, Player.Stats.Mana.Max, 1, 21)));
+            screen.Add(String.Format(@"  ATK:   {0}/{1}{2}"          , Player.Stats.Attack.Current, Player.Stats.Attack.Max, Utilities.SpaceBuilder(Player.Stats.Attack.Current, Player.Stats.Attack.Max, 1, 21)));
+            screen.Add(String.Format(@"  DEF:   {0}/{1}{2}"          , Player.Stats.Defense.Current, Player.Stats.Defense.Max, Utilities.SpaceBuilder(Player.Stats.Defense.Current, Player.Stats.Defense.Max, 1, 21)));
+            screen.Add(String.Format(@"  MATK:  {0}/{1}{2}"          , Player.Stats.MagicAttack.Current,  Player.Stats.MagicAttack.Max, Utilities.SpaceBuilder(Player.Stats.MagicAttack.Current, Player.Stats.MagicAttack.Max, 1, 21)));
+            screen.Add(String.Format(@"  MDEF:  {0}/{1}{2}"          , Player.Stats.MagicDefense.Current, Player.Stats.MagicDefense.Max, Utilities.SpaceBuilder(Player.Stats.MagicDefense.Current, Player.Stats.MagicDefense.Max, 1, 21)));
+            screen.Add(String.Format(@"  SPD:   {0}/{1}{2}"          , Player.Stats.Speed.Current, Player.Stats.Speed.Max, Utilities.SpaceBuilder(Player.Stats.Speed.Current, Player.Stats.Speed.Max, 1, 21)));
             /*========================================================*/
 
             return screen;

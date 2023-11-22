@@ -1,11 +1,11 @@
-﻿using RPGGame.Interfaces;
+﻿using NGPlusPlus.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RPGGame.GameScreensNamespace
+namespace NGPlusPlus.GameScreensNamespace
 {
     internal class GameOver : IGameScreen
     {

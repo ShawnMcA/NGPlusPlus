@@ -1,13 +1,13 @@
-﻿using RPGGame.Abilities;
-using RPGGame.Core;
-using RPGGame.EnemyNamespace;
-using RPGGame.Enums;
-using RPGGame.Interfaces;
-using RPGGame.PlayerNameSpace;
-using RPGGame.SceneManagerNamespace;
+﻿using NGPlusPlus.Abilities;
+using NGPlusPlus.Core;
+using NGPlusPlus.EnemyNamespace;
+using NGPlusPlus.Enums;
+using NGPlusPlus.Interfaces;
+using NGPlusPlus.PlayerNameSpace;
+using NGPlusPlus.SceneManagerNamespace;
 using System.Diagnostics;
 
-namespace RPGGame.BattleManagerNamespace
+namespace NGPlusPlus.BattleManagerNamespace
 {
     internal class BattleManager
     {
@@ -15,27 +15,27 @@ namespace RPGGame.BattleManagerNamespace
         private bool BattleWon = false;
 
         private Player Player;
-        private Enemy Enemy;
+        private ICreature Enemy;
 
         private List<ICreature> TurnOrder = new List<ICreature>();
 
-        private ICreature CurrentCreature;
-
         private SceneManager SceneManager;
         private IGameScreen EnemyScreen;
+        private bool IsAmbushed = false;
 
-        public BattleManager(Enemy enemy, SceneManager sceneManager, IGameScreen enemyScreen) 
+        public BattleManager(ICreature enemy, SceneManager sceneManager, IGameScreen enemyScreen, bool isAmbushed = false) 
         {
             Player = Player.GetInstance();
             Enemy = enemy;
             SceneManager = sceneManager;
             EnemyScreen = enemyScreen;
+            IsAmbushed = isAmbushed;
         }
 
         #region Game Loop
         public bool CoreLoop()
         {
-            SceneManager.PlayFightScreen(Enemy, EnemyScreen);
+            SceneManager.PlayFightScreen(EnemyScreen);
             SetTurnOrder();
 
             do
@@ -44,7 +44,7 @@ namespace RPGGame.BattleManagerNamespace
 
                 foreach (var c in TurnOrder)
                 {
-                    BeginningOfTurnActions(c);
+                    BeginningOfTurnActions();
                     CreatureTurnActions(c);
                     EndOfTurnActions();
 
@@ -65,43 +65,24 @@ namespace RPGGame.BattleManagerNamespace
         #endregion Game Loop
 
         #region Turn/Round Actions
-        private void BeginningOfTurnActions(ICreature creature)
-        {
-            CurrentCreature = creature;
-        }
+        private void BeginningOfTurnActions() {}
 
         private void CreatureTurnActions(ICreature creature)
         {
-            if (creature is Player)
-            {
-                IAbility ability = PlayerAbilitySelection();
+            IAbility ability = creature.PickAbility();
 
-                ICreature target = GetTarget(ability.TargetType, true);
+            ICreature target = GetTarget(ability.TargetType, creature.CreatureType == CreatureType.Player);
 
-                ResolveAction(target, creature, ability);
-            }
-
-            else
-            {
-                IAbility ability = EnemyAbilitySelection((Enemy)creature);
-
-                ICreature target = GetTarget(ability.TargetType, false);
-
-                ResolveAction(target, creature, ability);
-            }
+            ResolveAction(target, creature, ability);
         }
 
         private void EndOfTurnActions()
         {
-            SceneManager.PlayFightScreen(Enemy, EnemyScreen);
-            CurrentCreature = null;
+            SceneManager.PlayFightScreen(EnemyScreen);
             CheckForDeath();
         }
 
-        private void BeginningOfRoundActions()
-        {
-
-        }
+        private void BeginningOfRoundActions() {}
         private void EndOfRoundActions()
         {
             //ResetStats();
@@ -112,7 +93,7 @@ namespace RPGGame.BattleManagerNamespace
         #region General
         private void SetTurnOrder()
         {
-            if(Player.CurrentSpeed > Enemy.CurrentSpeed)
+            if(!IsAmbushed && Player.CalculateSpeed() > Enemy.CalculateSpeed())
             {
                 TextLogger.ClearWriteTextAndWait($"You caught {Enemy.Name} off guard...");
                 TurnOrder.Add(Player);
@@ -127,41 +108,14 @@ namespace RPGGame.BattleManagerNamespace
 
         private void CheckForDeath()
         {
-            if (Player.IsDead())
-            {
-                BattleActive = false;
-                BattleWon = false;
+            BattleActive = !Player.Stats.IsDead() && !Enemy.Stats.IsDead();
+            BattleWon = !Player.Stats.IsDead() && Enemy.Stats.IsDead();
 
-                return;
-            }
-
-            if (Enemy.IsDead())
-            {
-                BattleActive = false;
-                BattleWon = true;
-            }
+            return;
         }
         #endregion General
 
         #region Battle Actions
-        private IAbility PlayerAbilitySelection()
-        {
-            int ability = 9999;
-
-            do
-            {
-                TextLogger.ClearWriteText("Choose an ability...");
-                Int32.TryParse(Console.ReadLine(), out ability);
-            } while (ability <= 0 || ability > Player.Abilities.Count());
-
-            return Player.Abilities[ability - 1]; 
-        }
-
-        private IAbility EnemyAbilitySelection(Enemy creature)
-        {
-            return creature.PickAbility();
-        }
-
         private ICreature GetTarget(TargetType targetType, bool isPlayer)
         {
             switch (targetType)

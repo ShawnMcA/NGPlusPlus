@@ -1,9 +1,9 @@
-﻿using RPGGame.Core;
-using RPGGame.EnemyNamespace;
-using RPGGame.Interfaces;
-using RPGGame.PlayerNameSpace;
+﻿using NGPlusPlus.Core;
+using NGPlusPlus.EnemyNamespace;
+using NGPlusPlus.Interfaces;
+using NGPlusPlus.PlayerNameSpace;
 
-namespace RPGGame.GameScreensNamespace
+namespace NGPlusPlus.GameScreensNamespace
 {
     internal class AbilityMenu : IGameScreen
     {

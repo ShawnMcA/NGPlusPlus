@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace NGPlusPlus.Interfaces
 {
-    public interface IGameScreen
+    public interface IStat
     {
-        int AnimationSpeed { get; }
-        List<string> Screen1();
-        List<List<string>> AnimationPackage();
+        int Current { get; set; }
+        int Max { get; set; }
     }
 }

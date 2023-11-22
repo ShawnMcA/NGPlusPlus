@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NG++", "NG++.csproj", "{592617E6-DCF8-4850-9A4A-F64F202A269F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NGPlusPlus", "NGPlusPlus.csproj", "{592617E6-DCF8-4850-9A4A-F64F202A269F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace RPGGame.Core {
+namespace NGPlusPlus.Core {
     public class Startup {
+
         private const int MF_BYCOMMAND = 0x00000000;
-        public const int SC_CLOSE = 0xF060;
         public const int SC_MINIMIZE = 0xF020;
         public const int SC_MAXIMIZE = 0xF030;
         public const int SC_SIZE = 0xF000;//resize
@@ -25,7 +25,6 @@ namespace RPGGame.Core {
 
             if (handle != IntPtr.Zero)
             {
-                DeleteMenu(sysMenu, SC_CLOSE, MF_BYCOMMAND);
                 DeleteMenu(sysMenu, SC_MINIMIZE, MF_BYCOMMAND);
                 DeleteMenu(sysMenu, SC_MAXIMIZE, MF_BYCOMMAND);
                 DeleteMenu(sysMenu, SC_SIZE, MF_BYCOMMAND);//resize

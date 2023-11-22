@@ -1,9 +1,9 @@
-﻿using RPGGame.Core;
-using RPGGame.EnemyNamespace;
-using RPGGame.Interfaces;
-using RPGGame.PlayerNameSpace;
+﻿using NGPlusPlus.Core;
+using NGPlusPlus.EnemyNamespace;
+using NGPlusPlus.Interfaces;
+using NGPlusPlus.PlayerNameSpace;
 
-namespace RPGGame.GameScreensNamespace
+namespace NGPlusPlus.GameScreensNamespace
 {
     internal class SpiderScreen : IGameScreen
     {
@@ -48,7 +48,7 @@ namespace RPGGame.GameScreensNamespace
             screen.Add(String.Format(@"                                        "));
             screen.Add(String.Format(@"                                        "));
             screen.Add(String.Format(@"                                        "));
-            screen.Add(String.Format(@"        HP:  {0}/{1}{2}"                , Enemy1.CurrentHealth, Enemy1.MaxHealth, Utilities.SpaceBuilder(Enemy1.CurrentHealth, Enemy1.MaxHealth, 1, 26)));
+            screen.Add(String.Format(@"        HP:  {0}/{1}{2}"                , Enemy1.Stats.Health.Current, Enemy1.Stats.Health.Max, Utilities.SpaceBuilder(Enemy1.Stats.Health.Current, Enemy1.Stats.Health.Max, 1, 26)));
             screen.Add(String.Format(@"        Lvl. {0} - {1}{2}"              , Enemy1.Level, Enemy1.Name, Utilities.SpaceBuilder(Enemy1.Level, Enemy1.Name, 3, 26)));
             /*===================================================================*/
 
@@ -73,7 +73,7 @@ namespace RPGGame.GameScreensNamespace
             screen.Add(String.Format(@"                                        "));
             screen.Add(String.Format(@"                                        "));
             screen.Add(String.Format(@"                                        "));
-            screen.Add(String.Format(@"        HP:  {0}/{1}{2}"                 , Enemy1.CurrentHealth, Enemy1.MaxHealth, Utilities.SpaceBuilder(Enemy1.CurrentHealth, Enemy1.MaxHealth, 1, 26)));
+            screen.Add(String.Format(@"        HP:  {0}/{1}{2}"                 , Enemy1.Stats.Health.Current, Enemy1.Stats.Health.Max, Utilities.SpaceBuilder(Enemy1.Stats.Health.Current, Enemy1.Stats.Health.Max, 1, 26)));
             screen.Add(String.Format(@"        Lvl. {0} - {1}{2}"               , Enemy1.Level, Enemy1.Name, Utilities.SpaceBuilder(Enemy1.Level, Enemy1.Name, 3, 26)));
             /*===================================================================*/
 
@@ -97,7 +97,7 @@ namespace RPGGame.GameScreensNamespace
             screen.Add(String.Format(@"                                        "));
             screen.Add(String.Format(@"                                        "));
             screen.Add(String.Format(@"                                        "));
-            screen.Add(String.Format(@"        HP:  {0}/{1}{2}"                 , Enemy1.CurrentHealth, Enemy1.MaxHealth, Utilities.SpaceBuilder(Enemy1.CurrentHealth, Enemy1.MaxHealth, 1, 26)));
+            screen.Add(String.Format(@"        HP:  {0}/{1}{2}", Enemy1.Stats.Health.Current, Enemy1.Stats.Health.Max, Utilities.SpaceBuilder(Enemy1.Stats.Health.Current, Enemy1.Stats.Health.Max, 1, 26)));
             screen.Add(String.Format(@"        Lvl. {0} - {1}{2}"               , Enemy1.Level, Enemy1.Name, Utilities.SpaceBuilder(Enemy1.Level, Enemy1.Name, 3, 26)));
             /*===================================================================*/
 
@@ -122,7 +122,7 @@ namespace RPGGame.GameScreensNamespace
             screen.Add(String.Format(@"                                        "));
             screen.Add(String.Format(@"                                        "));
             screen.Add(String.Format(@"                                        "));
-            screen.Add(String.Format(@"        HP:  {0}/{1}{2}"                 , Enemy1.CurrentHealth, Enemy1.MaxHealth, Utilities.SpaceBuilder(Enemy1.CurrentHealth, Enemy1.MaxHealth, 1, 26)));
+            screen.Add(String.Format(@"        HP:  {0}/{1}{2}", Enemy1.Stats.Health.Current, Enemy1.Stats.Health.Max, Utilities.SpaceBuilder(Enemy1.Stats.Health.Current, Enemy1.Stats.Health.Max, 1, 26)));
             screen.Add(String.Format(@"        Lvl. {0} - {1}{2}"               , Enemy1.Level, Enemy1.Name, Utilities.SpaceBuilder(Enemy1.Level, Enemy1.Name, 3, 26)));
             /*===================================================================*/
 
@@ -146,7 +146,7 @@ namespace RPGGame.GameScreensNamespace
             screen.Add(String.Format(@"                                        "));
             screen.Add(String.Format(@"                                        "));
             screen.Add(String.Format(@"                                        "));
-            screen.Add(String.Format(@"        HP:  {0}/{1}{2}"                 , Enemy1.CurrentHealth, Enemy1.MaxHealth, Utilities.SpaceBuilder(Enemy1.CurrentHealth, Enemy1.MaxHealth, 1, 26)));
+            screen.Add(String.Format(@"        HP:  {0}/{1}{2}", Enemy1.Stats.Health.Current, Enemy1.Stats.Health.Max, Utilities.SpaceBuilder(Enemy1.Stats.Health.Current, Enemy1.Stats.Health.Max, 1, 26)));
             screen.Add(String.Format(@"        Lvl. {0} - {1}{2}"               , Enemy1.Level, Enemy1.Name, Utilities.SpaceBuilder(Enemy1.Level, Enemy1.Name, 3, 26)));
             /*===================================================================*/
 

@@ -1,6 +1,6 @@
 using System;
 
-namespace RPGGame.Data
+namespace NGPlusPlus.Data
 {
     public static class SaveKey
     {

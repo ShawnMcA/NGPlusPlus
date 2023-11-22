@@ -1,9 +1,9 @@
-using RPGGame.GameSettingsNamespace;
+using NGPlusPlus.GameSettingsNamespace;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace RPGGame.Core
+namespace NGPlusPlus.Core
 {
     public static class TextLogger
     {

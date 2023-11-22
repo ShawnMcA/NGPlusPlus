@@ -1,6 +1,6 @@
-﻿using RPGGame.Enums;
+﻿using NGPlusPlus.Enums;
 
-namespace RPGGame.Interfaces
+namespace NGPlusPlus.Interfaces
 {
     public interface IAbility
     {

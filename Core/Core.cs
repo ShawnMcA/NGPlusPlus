@@ -1,14 +1,14 @@
-﻿using RPGGame.BattleManagerNamespace;
-using RPGGame.EnemyNamespace;
-using RPGGame.Enums;
-using RPGGame.GameScreensNamespace;
-using RPGGame.GameSettingsNamespace;
-using RPGGame.PlayerNameSpace;
-using RPGGame.SceneManagerNamespace;
-using RPGGame.ScreenRendererNamespace;
+﻿using NGPlusPlus.BattleManagerNamespace;
+using NGPlusPlus.EnemyNamespace;
+using NGPlusPlus.Enums;
+using NGPlusPlus.GameScreensNamespace;
+using NGPlusPlus.GameSettingsNamespace;
+using NGPlusPlus.PlayerNameSpace;
+using NGPlusPlus.SceneManagerNamespace;
+using NGPlusPlus.ScreenRendererNamespace;
 using System.Xml.Linq;
 
-namespace RPGGame.Core {
+namespace NGPlusPlus.Core {
     public static class Core {
 
         private static Player player;
@@ -29,19 +29,25 @@ namespace RPGGame.Core {
             SceneManager.PlayIntro();
 
             var spider = new Enemy(EnemyType.Rat, "Black Widow", 1);
-            var BattleManager = new BattleManager(spider, SceneManager, new SpiderScreen(spider));
+            var BattleManager = new BattleManager(spider, SceneManager, new SpiderScreen(spider), true);
             TextLogger.ClearWriteTextAndWait("Watch out! You're being attacked....");
             var wonBattle = BattleManager.CoreLoop();
 
             if (wonBattle)
+            {
                 SceneManager.PlayBattleWon();
-            else 
+            }
+            else
+            {
                 SceneManager.PlayGameOver();
+            }
+                
         }
 
         public static bool RestartGame() 
         {
             var restart = "";
+
             do
             {
                 TextLogger.ClearWriteText("Would you like to start a new game?");

@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace RPGGame.Core
+namespace NGPlusPlus.Core
 {
     public static class Utilities
     {
@@ -50,6 +50,10 @@ namespace RPGGame.Core
             int spacesToFill)
         {
             return new string(' ', spacesToFill - alreadyFilled - val2.Length);
+        }
+
+        public static List<string> GetEnumNames(Type enumType) {
+            return new List<string>(Enum.GetNames(enumType));
         }
     }
 }

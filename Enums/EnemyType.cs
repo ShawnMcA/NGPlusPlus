@@ -1,4 +1,4 @@
-﻿namespace RPGGame.Enums
+﻿namespace NGPlusPlus.Enums
 {
     public enum EnemyType
     {

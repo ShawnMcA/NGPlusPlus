@@ -1,7 +1,7 @@
-﻿using RPGGame.GameSettingsNamespace;
-using RPGGame.Interfaces;
+﻿using NGPlusPlus.GameSettingsNamespace;
+using NGPlusPlus.Interfaces;
 
-namespace RPGGame.ScreenRendererNamespace
+namespace NGPlusPlus.ScreenRendererNamespace
 {
     public static class ScreenRenderer
     {

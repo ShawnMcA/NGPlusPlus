@@ -1,8 +1,8 @@
-using RPGGame.Data;
-using RPGGame.Enums;
-using RPGGame.Interfaces;
+using NGPlusPlus.Data;
+using NGPlusPlus.Enums;
+using NGPlusPlus.Interfaces;
 
-namespace RPGGame.EnemyNameSpace
+namespace NGPlusPlus.EnemyNameSpace
 {
     public static class TemplateManager
     {

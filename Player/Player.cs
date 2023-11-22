@@ -1,12 +1,8 @@
-﻿using RPGGame.Core;
-using RPGGame.Data;
-using RPGGame.Enums;
-using RPGGame.Interfaces;
-using RPGGame.PlayerNameSpace;
-using System;
-using System.Collections.Generic;
+﻿using NGPlusPlus.Core;
+using NGPlusPlus.Enums;
+using NGPlusPlus.Interfaces;
 
-namespace RPGGame.PlayerNameSpace
+namespace NGPlusPlus.PlayerNameSpace
 {
     public sealed class Player : ICreature
     {
@@ -23,38 +19,25 @@ namespace RPGGame.PlayerNameSpace
         }
 
         #region "Properties"
+
+        public CreatureType CreatureType => CreatureType.Player;
         public string Name { get; private set; }
-        public PlayerClass Class { get; private set; } = PlayerClass.Archer;
-        public int Level { get; private set; }
-        public int Experience { get; private set; }
-        public int ExperienceNeeded { get; private set; }
-        public int MaxHealth { get; private set; }
-        public int CurrentHealth { get; private set; }
-        public int MaxMana { get; private set; }
-        public int CurrentMana { get; private set; }
-        public int Attack { get; private set; }
-        public int CurrentAttack { get; private set; }
-        public int Defense { get; private set; }
-        public int CurrentDefense { get; private set; }
-        public int MagicAttack { get; private set; }
-        public int CurrentMagicAttack { get; private set; }
-        public int MagicDefense { get; private set; }
-        public int CurrentMagicDefense { get; private set; }
-        public int Speed { get; private set; }
-        public int CurrentSpeed { get; private set; }
+        public PlayerClass Class { get; private set; } = PlayerClass.Knight;
+        public int Experience { get; set; }
+        public int ExperienceNeeded { get; set; }
+        public IStats Stats { get; private set; }
         public List<IAbility> Abilities { get; private set; }
-        public bool IsDead() => CurrentHealth <= 0;
 
         #endregion "Properties"
 
         #region "Saving/Loading"
-        public void InitializePlayer(string name)
+        public void InitializePlayer(string name, PlayerClass playerClass)
         {
             if (!string.IsNullOrEmpty(Name)) // Player already initialized
                 return;
 
             Name = name;
-            SetClass(Class);
+            SetClass(playerClass);
         }
 
         public void ResetPlayer()
@@ -68,23 +51,7 @@ namespace RPGGame.PlayerNameSpace
 
             var template = TemplateManager.GetPlayerTemplate(Class, 1);
 
-            Level = 1;
-            Experience = 0;
-            ExperienceNeeded = template.ExperienceNeeded;
-            MaxHealth = template.MaxHealth;
-            CurrentHealth = MaxHealth;
-            MaxMana= template.MaxMana;
-            CurrentMana = MaxMana;
-            Attack = template.Attack;
-            CurrentAttack = Attack;
-            Defense = template.Defense;
-            CurrentDefense = Defense;
-            MagicAttack = template.MagicAttack;
-            CurrentMagicAttack = MagicAttack;
-            MagicDefense = template.MagicDefense;
-            CurrentMagicDefense = MagicDefense;
-            Speed = template.Speed;
-            CurrentSpeed = Speed;
+            Stats = template.Stats;
             Abilities = template.Abilities;
         }
         #endregion "Saving/Loading"
@@ -99,20 +66,12 @@ namespace RPGGame.PlayerNameSpace
 
         private void LevelUp() 
         {
-            Level += 1;
+            Stats.Level += 1;
 
-            var template = TemplateManager.GetPlayerTemplate(Class, Level);
+            var template = TemplateManager.GetPlayerTemplate(Class, Stats.Level);
 
             ExperienceNeeded = template.ExperienceNeeded;
-            MaxHealth = template.MaxHealth;
-            CurrentHealth = MaxHealth;
-            MaxMana = template.MaxMana;
-            CurrentMana= MaxMana;
-            Attack = template.Attack;
-            Defense = template.Defense;
-            MagicAttack = template.MagicAttack;
-            MagicDefense = template.MagicDefense;
-            Speed = template.Speed;
+            Stats = template.Stats;
             Abilities = template.Abilities;
         }
         #endregion "Experience/Levels"
@@ -122,56 +81,57 @@ namespace RPGGame.PlayerNameSpace
         public int CalculateSpeed() 
         {
             Random rnd = new Random();
-            return rnd.Next(CurrentSpeed * 1, CurrentSpeed * 2);
+            return rnd.Next(Stats.Speed.Current * 1, Stats.Speed.Current * 2);
         }
 
         public int CalculatePhysicalDamage(int rangeLow, int rangeHigh) 
         {
             Random rnd = new Random();
-            return rnd.Next((CurrentAttack + rangeLow) * 1, (CurrentAttack + rangeHigh));
+            return rnd.Next((Stats.Attack.Current + rangeLow) * 1, (Stats.Attack.Current + rangeHigh));
         }
 
         public int CalculateMagicDamage(int rangeLow, int rangeHigh)
         {
             Random rnd = new Random();
-            return rnd.Next((CurrentMagicAttack + rangeLow) * 1, (CurrentMagicAttack + rangeHigh));
+            return rnd.Next((Stats.MagicAttack.Current + rangeLow) * 1, (Stats.MagicAttack.Current + rangeHigh));
         }
 
         public void TakePhysicalDamage(int enemyAttack)
         {
-            var damage = enemyAttack - (CurrentDefense); // Can change to more complex calculation
+            var damage = enemyAttack - (Stats.Defense.Current); // Can change to more complex calculation
 
             if (damage < 0) damage = 0;
 
             TextLogger.ClearWriteTextAndWait($"{Name} blocks {enemyAttack - damage} damage and takes {damage}.");
 
-            CurrentHealth -= damage;
+            Stats.Health.Current -= damage;
 
-            if (CurrentHealth < 0)
+            if (Stats.Health.Current < 0)
             {
-                CurrentHealth = 0;
+                Stats.Health.Current = 0;
             }
         }
 
         public void TakeMagicDamage(int enemyAttack)
         {
-            var damage = enemyAttack - (CurrentMagicDefense * 2); // Can change to more complex calculation
+            var damage = enemyAttack - (Stats.MagicDefense.Current * 2); // Can change to more complex calculation
 
             if (damage < 0) damage = 0;
 
             TextLogger.ClearWriteTextAndWait($"{Name} blocks {enemyAttack - damage} damage and takes {damage}.");
 
-            CurrentHealth -= damage;
+            Stats.Health.Current -= damage;
 
-            if (CurrentHealth < 0)
+            if (Stats.Health.Current < 0)
             {
-                CurrentHealth = 0;
+                Stats.Health.Current = 0;
             }
         }
+
         public void Defend() 
         {
-            CurrentDefense = (int)Math.Ceiling(Defense * 1.1);
-            CurrentMagicDefense = (int)Math.Ceiling(MagicDefense * 1.1);
+            Stats.Defense.Current = (int)Math.Ceiling(Stats.Defense.Max * 1.1);
+            Stats.Defense.Current = (int)Math.Ceiling(Stats.Defense.Max * 1.1);
         }
 
         public void BuffStat(StatType statType, int amount)
@@ -179,64 +139,79 @@ namespace RPGGame.PlayerNameSpace
             switch (statType)
             {
                 case StatType.Attack:
-                    CurrentAttack += amount;
-
-                    if (CurrentAttack < 1) CurrentAttack = 1;
-
+                    Stats.Attack.Current += amount;
+                    if (Stats.Attack.Current < 1)
+                        Stats.Attack.Current = 1;
                     break;
+
                 case StatType.Defense:
-                    CurrentDefense += amount;
-                    if (CurrentDefense < 1) CurrentDefense = 1;
-
+                    Stats.Defense.Current += amount;
+                    if (Stats.Defense.Current < 1) 
+                        Stats.Defense.Current = 1;
                     break;
+
                 case StatType.MagicAttack:
-                    CurrentMagicAttack += amount;
-
-                    if (CurrentMagicAttack < 1) CurrentMagicAttack = 1;
-
+                    Stats.MagicAttack.Current += amount;
+                    if (Stats.MagicAttack.Current < 1)
+                        Stats.MagicAttack.Current = 1;
                     break;
+
                 case StatType.MagicDefense:
-                    CurrentMagicDefense += amount;
-
-                    if (CurrentMagicDefense < 1) CurrentMagicDefense = 1;
-
+                    Stats.MagicDefense.Current += amount;
+                    if (Stats.MagicDefense.Current < 1)
+                        Stats.MagicDefense.Current = 1;
                     break;
+
                 case StatType.Speed:
-                    CurrentSpeed += amount;
-
-                    if (CurrentSpeed < 1) CurrentSpeed = 1;
-
+                    Stats.Speed.Current += amount;
+                    if (Stats.Speed.Current < 1)
+                        Stats.Speed.Current = 1;
                     break;
             }
         }
 
         public void RestoreHealth(int healthGained) 
         {
-            CurrentHealth += healthGained;
+            Stats.Health.Current += healthGained;
 
-            if (CurrentHealth > MaxHealth) CurrentHealth = MaxHealth;
+            if (Stats.Health.Current > Stats.Health.Max)
+                Stats.Health.Current = Stats.Health.Max;
         }
 
         public void RestoreMana(int manaGained)
         {
-            CurrentMana += manaGained;
+            Stats.Mana.Current += manaGained;
 
-            if (CurrentMana > MaxMana) CurrentMana = MaxMana;
+            if (Stats.Mana.Current > Stats.Mana.Max)
+                Stats.Mana.Current = Stats.Mana.Max;
         }
 
         public void ResetHealthAndMana() 
         {
-            CurrentHealth = MaxHealth;
-            CurrentMana = MaxMana;
+            Stats.Health.Current = Stats.Health.Max;
+            Stats.Mana.Current = Stats.Mana.Max;
         }
 
         public void ResetStats() 
         {
-            CurrentAttack = Attack;
-            CurrentDefense = Defense;
-            CurrentMagicAttack = MagicAttack;
-            CurrentMagicDefense = MagicDefense;
-            CurrentSpeed = Speed;
+            Stats.Attack.Current = Stats.Attack.Max;
+            Stats.Defense.Current = Stats.Defense.Max;
+            Stats.MagicAttack.Current = Stats.MagicAttack.Max;
+            Stats.MagicDefense.Current = Stats.MagicDefense.Max;
+            Stats.Speed.Current = Stats.Speed.Max;
+        }
+
+        public IAbility PickAbility() 
+        {
+            int ability = 9999;
+
+            do
+            {
+                TextLogger.ClearWriteText("Choose an ability...");
+                Int32.TryParse(Console.ReadLine(), out ability);
+            } while (ability <= 0 || ability > Abilities.Count);
+
+            return Abilities[ability - 1];
         }
         #endregion "Battling"
     }

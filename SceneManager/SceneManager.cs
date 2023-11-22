@@ -1,35 +1,27 @@
-﻿using RPGGame.Core;
-using RPGGame.EnemyNamespace;
-using RPGGame.Enums;
-using RPGGame.GameScreensNamespace;
-using RPGGame.Interfaces;
-using RPGGame.PlayerNameSpace;
-using RPGGame.ScreenRendererNamespace;
+﻿using NGPlusPlus.Core;
+using NGPlusPlus.EnemyNamespace;
+using NGPlusPlus.Enums;
+using NGPlusPlus.GameScreensNamespace;
+using NGPlusPlus.Interfaces;
+using NGPlusPlus.PlayerNameSpace;
+using NGPlusPlus.ScreenRendererNamespace;
 
-namespace RPGGame.SceneManagerNamespace
+namespace NGPlusPlus.SceneManagerNamespace
 {
     internal class SceneManager
     {
-        private IGameScreen TitleScreen;
-        private IGameScreen Intro;
-        private IGameScreen GameOver;
-        private IGameScreen FightScreen;
-        private IGameScreen BattleWon;
-
-        private Player player;
+        private readonly Player Player;
 
         public SceneManager()
         {
-            TitleScreen = new TitleScreen();
-            Intro = new Intro();
-            GameOver = new GameOver();
-            BattleWon = new BattleWon();
-            player = Player.GetInstance();
+            Player = Player.GetInstance();
         }
 
         public void PlayTitle() 
         {
-            ScreenRenderer.RenderAnimation(TitleScreen);
+            var titleScreen = new TitleScreen();
+
+            ScreenRenderer.RenderAnimation(titleScreen);
 
             TextLogger.ClearWriteTextAndWait("Press any key to start your adventure...");
             TextLogger.ClearWindow();
@@ -37,40 +29,69 @@ namespace RPGGame.SceneManagerNamespace
 
         public void PlayIntro() 
         {
-            ScreenRenderer.RenderAnimation(Intro);
+            var intro = new Intro();
+
+            ScreenRenderer.RenderAnimation(intro);
 
             TextLogger.ClearWriteTextAndWait("Welcome to nowhere... Hope you aren't lost...");
 
-            player.InitializePlayer(GetUserName());
+            var name = GetPlayerName();
 
-            TextLogger.ClearWriteTextAndWait($"Hello {player.Name}!!");
+            var playerClass = GetPlayerClass();
+
+            Player.InitializePlayer(name, playerClass);
 
         }
 
-        public void PlayFightScreen(Enemy enemy, IGameScreen enemyScreen)
+        public void PlayFightScreen(IGameScreen enemyScreen)
         {
-            var fightScreenRenderer = new FightScreenRenderer(enemy, enemyScreen);
+            var fightScreenRenderer = new FightScreenRenderer(enemyScreen);
             fightScreenRenderer.RenderFightScreen();
         }
+
         public void PlayBattleWon()
         {
-            ScreenRenderer.RenderAnimation(BattleWon);
+            var battleWon = new BattleWon();
+            ScreenRenderer.RenderAnimation(battleWon);
 
             TextLogger.ClearWriteTextAndWait("Congrats!! You made it out alive...");
 
-            player.ResetPlayer();
+            Player.ResetPlayer();
         }
 
         public void PlayGameOver()
         {
-            ScreenRenderer.RenderAnimation(GameOver);
+            var gameOver = new GameOver();
+
+            ScreenRenderer.RenderAnimation(gameOver);
 
             TextLogger.ClearWriteTextAndWait("Ohh no... It seems you're no longer with us. It was fun while it lasted...");
 
-            player.ResetPlayer();
+            Player.ResetPlayer();
         }
 
-        private static string GetUserName()
+        private static PlayerClass GetPlayerClass()
+        {
+            int classType;
+
+            var enumNames = Enum.GetNames(typeof(PlayerClass));
+
+            do
+            {
+                TextLogger.ClearWriteText("What playstyle would you prefer for this adventure?");
+
+                for (var i = 0; i < enumNames.Length; i++)
+                {
+                    TextLogger.WriteText($"{i + 1}) {enumNames[i]}");
+                }
+
+                int.TryParse(Console.ReadLine(), out classType);
+            } while (classType <= 0 || classType > enumNames.Length);
+
+            return (PlayerClass)classType - 1;
+        }
+
+        private static string GetPlayerName()
         {
             TextLogger.ClearWriteText("What is your name?");
             var name = Console.ReadLine();
@@ -80,6 +101,8 @@ namespace RPGGame.SceneManagerNamespace
                 TextLogger.ClearWriteText("Sorry, you must enter a name: ");
                 name = Console.ReadLine();
             }
+
+            TextLogger.ClearWriteTextAndWait($"Hello {name}!!");
 
             return name;
         }

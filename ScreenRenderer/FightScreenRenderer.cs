@@ -1,9 +1,9 @@
-﻿using RPGGame.EnemyNamespace;
-using RPGGame.GameScreensNamespace;
-using RPGGame.GameSettingsNamespace;
-using RPGGame.Interfaces;
+﻿using NGPlusPlus.EnemyNamespace;
+using NGPlusPlus.GameScreensNamespace;
+using NGPlusPlus.GameSettingsNamespace;
+using NGPlusPlus.Interfaces;
 
-namespace RPGGame.ScreenRendererNamespace
+namespace NGPlusPlus.ScreenRendererNamespace
 {
     public class FightScreenRenderer
     {
@@ -11,13 +11,11 @@ namespace RPGGame.ScreenRendererNamespace
         private static IGameScreen StatBox;
         private static IGameScreen AbilityMenu;
         private static IGameScreen EnemyScreen;
-        private static ICreature Enemy;
 
-        public FightScreenRenderer(ICreature enemy, IGameScreen enemyScreen) {
+        public FightScreenRenderer(IGameScreen enemyScreen) {
             FightScreen = new FightScreen();
             StatBox = new StatBox();
             AbilityMenu = new AbilityMenu();
-            Enemy = enemy;
             EnemyScreen = enemyScreen;
         }
 

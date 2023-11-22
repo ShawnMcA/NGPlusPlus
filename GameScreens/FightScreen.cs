@@ -1,8 +1,8 @@
-﻿using RPGGame.Core;
-using RPGGame.EnemyNamespace;
-using RPGGame.Interfaces;
+﻿using NGPlusPlus.Core;
+using NGPlusPlus.EnemyNamespace;
+using NGPlusPlus.Interfaces;
 
-namespace RPGGame.GameScreensNamespace
+namespace NGPlusPlus.GameScreensNamespace
 {
     internal class FightScreen : IGameScreen
     {

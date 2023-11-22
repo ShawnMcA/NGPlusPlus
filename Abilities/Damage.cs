@@ -1,7 +1,7 @@
-using RPGGame.Enums;
-using RPGGame.Interfaces;
+using NGPlusPlus.Enums;
+using NGPlusPlus.Interfaces;
 
-namespace RPGGame.Abilities
+namespace NGPlusPlus.Abilities
 {
     public class Damage : IAbility
     {

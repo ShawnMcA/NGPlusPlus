@@ -1,16 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using NGPlusPlus.StatsNamespace;
+using System.Collections.Generic;
 
-namespace RPGGame.Interfaces
+namespace NGPlusPlus.Interfaces
 {
     public interface IPlayerTemplate {
         int ExperienceNeeded { get; }
-        int MaxHealth { get; }
-        int MaxMana { get; }
-        int Attack { get; }
-        int Defense { get; }
-        int MagicAttack { get; }
-        int MagicDefense { get; }
-        int Speed { get; }
+        IStats Stats { get; }
         List<IAbility> Abilities { get; }
     }
 }
