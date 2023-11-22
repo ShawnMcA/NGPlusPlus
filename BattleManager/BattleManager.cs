@@ -5,6 +5,7 @@ using NGPlusPlus.Enums;
 using NGPlusPlus.Interfaces;
 using NGPlusPlus.PlayerNameSpace;
 using NGPlusPlus.SceneManagerNamespace;
+using NGPlusPlus.StatsNamespace;
 using System.Diagnostics;
 
 namespace NGPlusPlus.BattleManagerNamespace
@@ -93,7 +94,7 @@ namespace NGPlusPlus.BattleManagerNamespace
         #region General
         private void SetTurnOrder()
         {
-            if(!IsAmbushed && Player.CalculateSpeed() > Enemy.CalculateSpeed())
+            if(!IsAmbushed && Player.CalculateBattleSpeed() > Enemy.CalculateBattleSpeed())
             {
                 TextLogger.ClearWriteTextAndWait($"You caught {Enemy.Name} off guard...");
                 TurnOrder.Add(Player);
@@ -152,45 +153,34 @@ namespace NGPlusPlus.BattleManagerNamespace
 
         private void HandleDamage(ICreature target, ICreature attacker, Damage ability)
         {
-            if (ability.DamageType == DamageType.Physical)
-            {
-                var damage = attacker.CalculatePhysicalDamage(ability.RangeLow, ability.RangeHigh);
+            var damage = attacker.CalculateDamageOutput(ability.RangeLow, ability.RangeHigh, ability.DamageType);
 
-                TextLogger.ClearWriteTextAndWait($"{attacker.Name} used {ability.Name} and swings for {damage}.");
-                target.TakePhysicalDamage(damage);
-            }
-
-            else if (ability.DamageType == DamageType.Magic)
-            {
-                var damage = attacker.CalculateMagicDamage(ability.RangeLow, ability.RangeHigh);
-
-                TextLogger.ClearWriteTextAndWait($"{attacker.Name} used {ability.Name} and swings for {damage}.");
-                target.TakeMagicDamage(damage);
-            }
+            TextLogger.ClearWriteTextAndWait($"{attacker.Name} used {ability.Name} and swings for {damage}.");
+            target.TakeDamage(damage, ability.DamageType);
         }
 
         private void HandleHeal(ICreature target, ICreature attacker, Heal ability)
         {
             TextLogger.ClearWriteTextAndWait($"{attacker.Name} used {ability.Name}. {target.Name} is healed by {ability.Amount}.");
-            target.RestoreHealth(ability.Amount);
+            target.Stats.RestoreHealth(ability.Amount);
         }
 
         private void HandleBuff(ICreature target, ICreature attacker, Buff ability)
         {
             TextLogger.ClearWriteTextAndWait($"{attacker.Name} used {ability.Name}. {target.Name}'s {ability.StatType} is increased by {ability.Amount}.");
-            target.BuffStat(ability.StatType, ability.Amount);
+            target.Stats.BuffStat(ability.StatType, ability.Amount);
         }
 
         private void HandleDebuff(ICreature target, ICreature attacker, Debuff ability)
         {
             TextLogger.ClearWriteTextAndWait($"{attacker.Name} used {ability.Name}. {target.Name}'s {ability.StatType} is decreased by {ability.Amount}.");
-            target.BuffStat(ability.StatType, ability.Amount * -1);
+            target.Stats.BuffStat(ability.StatType, ability.Amount * -1);
         }
 
         private void ResetStats()
         {
-            Player.ResetStats();
-            Enemy.ResetStats();
+            Player.Stats.ResetAll();
+            Enemy.Stats.ResetAll();
         }
         #endregion Battle Actions
     }

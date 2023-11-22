@@ -34,6 +34,58 @@ namespace NGPlusPlus.StatsNamespace
         public IStat Speed { get; set; }
         public bool IsDead() => Health.Current <= 0;
 
+        public void RestoreHealth(int healthGained) 
+        {
+            Health.Current += healthGained;
+
+            if (Health.Current > Health.Max)
+                Health.Current = Health.Max;
+        }
+
+        public void RestoreMana(int manaGained)
+        {
+            Mana.Current += manaGained;
+
+            if (Mana.Current > Mana.Max)
+                Mana.Current = Mana.Max;
+        }
+
+        public void BuffStat(StatType statType, int amount)
+        {
+            switch (statType)
+            {
+                case StatType.Attack:
+                    Attack.Current += amount;
+                    if (Attack.Current < 1)
+                        Attack.Current = 1;
+                    break;
+
+                case StatType.Defense:
+                    Defense.Current += amount;
+                    if (Defense.Current < 1)
+                        Defense.Current = 1;
+                    break;
+
+                case StatType.MagicAttack:
+                    MagicAttack.Current += amount;
+                    if (MagicAttack.Current < 1)
+                        MagicAttack.Current = 1;
+                    break;
+
+                case StatType.MagicDefense:
+                    MagicDefense.Current += amount;
+                    if (MagicDefense.Current < 1)
+                        MagicDefense.Current = 1;
+                    break;
+
+                case StatType.Speed:
+                    Speed.Current += amount;
+                    if (Speed.Current < 1)
+                        Speed.Current = 1;
+                    break;
+            }
+        }
+
         public void ResetHealthAndMana() 
         {
             Health.Current = Health.Max;

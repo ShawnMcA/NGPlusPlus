@@ -1,4 +1,5 @@
-﻿using NGPlusPlus.Core;
+﻿using NGPlusPlus.BattleCalculatorNamespace;
+using NGPlusPlus.Core;
 using NGPlusPlus.Data;
 using NGPlusPlus.EnemyNameSpace;
 using NGPlusPlus.Enums;
@@ -38,28 +39,37 @@ namespace NGPlusPlus.EnemyNamespace
             ExperienceGiven = template.ExperienceGiven;
             Stats = template.Stats;
             Abilities = template.Abilities;
-
-            ResetStats();
         }
         #endregion "Saving/Loading"
 
         #region "Battling"
-        public int CalculateSpeed()
+        public int CalculateBattleSpeed()
         {
-            Random rnd = new Random();
-            return rnd.Next(Stats.Speed.Current * 1, Stats.Speed.Current * 2);
+            return BattleCalculator.CalculateSpeed(Stats.Speed.Current);
         }
 
-        public int CalculatePhysicalDamage(int rangeLow, int rangeHigh)
+        public int CalculateDamageOutput(int rangeLow, int rangeHigh, DamageType damageType)
         {
-            Random rnd = new Random();
-            return rnd.Next((Stats.Attack.Current + rangeLow) * 1, (Stats.Attack.Current + rangeHigh));
+            return BattleCalculator.CalculateDamageOutput(rangeLow,
+                rangeHigh,
+                damageType == DamageType.Physical ? Stats.Attack.Current : Stats.MagicAttack.Current
+            );
         }
 
-        public int CalculateMagicDamage(int rangeLow, int rangeHigh)
+        public void TakeDamage(int enemyAttack, DamageType damageType)
         {
-            Random rnd = new Random();
-            return rnd.Next((Stats.MagicAttack.Current + rangeLow) * 1, (Stats.MagicAttack.Current + rangeHigh));
+            var damage = BattleCalculator.CalculateDamageInput(enemyAttack,
+                damageType == DamageType.Physical ? Stats.Defense.Current : Stats.MagicDefense.Current
+            );
+
+            TextLogger.ClearWriteTextAndWait($"{Name} blocks {enemyAttack - damage} damage and takes {damage}.");
+
+            Stats.Health.Current -= damage;
+
+            if (Stats.Health.Current < 0)
+            {
+                Stats.Health.Current = 0;
+            }
         }
 
         public void Defend()
@@ -68,92 +78,6 @@ namespace NGPlusPlus.EnemyNamespace
             Stats.Defense.Current = (int)Math.Ceiling(Stats.Defense.Max * 1.1);
         }
 
-        public void TakePhysicalDamage(int enemyAttack)
-        {
-            var damage = enemyAttack - (Stats.Defense.Current); // Can change to more complex calculation
-
-            if (damage < 0)
-                damage = 0;
-
-            TextLogger.ClearWriteTextAndWait($"{Name} blocks {enemyAttack - damage} damage and takes {damage}.");
-
-            Stats.Health.Current -= damage;
-
-            if (Stats.Health.Current < 0)
-            {
-                Stats.Health.Current = 0;
-            }
-        }
-
-        public void TakeMagicDamage(int enemyAttack)
-        {
-            var damage = enemyAttack - (Stats.MagicDefense.Current * 2); // Can change to more complex calculation
-
-            if (damage < 0)
-                damage = 0;
-
-            TextLogger.ClearWriteTextAndWait($"{Name} blocks {enemyAttack - damage} damage and takes {damage}.");
-
-            Stats.Health.Current -= damage;
-
-            if (Stats.Health.Current < 0)
-            {
-                Stats.Health.Current = 0;
-            }
-        }
-
-        public void BuffStat(StatType statType, int amount)
-        {
-            switch (statType)
-            {
-                case StatType.Attack:
-                    Stats.Attack.Current += amount;
-                    if (Stats.Attack.Current < 1)
-                        Stats.Attack.Current = 1;
-                    break;
-
-                case StatType.Defense:
-                    Stats.Defense.Current += amount;
-                    if (Stats.Defense.Current < 1)
-                        Stats.Defense.Current = 1;
-                    break;
-
-                case StatType.MagicAttack:
-                    Stats.MagicAttack.Current += amount;
-                    if (Stats.MagicAttack.Current < 1)
-                        Stats.MagicAttack.Current = 1;
-                    break;
-
-                case StatType.MagicDefense:
-                    Stats.MagicDefense.Current += amount;
-                    if (Stats.MagicDefense.Current < 1)
-                        Stats.MagicDefense.Current = 1;
-                    break;
-
-                case StatType.Speed:
-                    Stats.Speed.Current += amount;
-                    if (Stats.Speed.Current < 1)
-                        Stats.Speed.Current = 1;
-                    break;
-            }
-        }
-
-        public void RestoreHealth(int healthGained)
-        {
-            Stats.Health.Current += healthGained;
-
-            if (Stats.Health.Current > Stats.Health.Max)
-                Stats.Health.Current = Stats.Health.Max;
-        }
-
-        public void ResetStats()
-        {
-            Stats.Attack.Current = Stats.Attack.Max;
-            Stats.Defense.Current = Stats.Defense.Max;
-            Stats.MagicAttack.Current = Stats.MagicAttack.Max;
-            Stats.MagicDefense.Current = Stats.MagicDefense.Max;
-            Stats.Speed.Current = Stats.Speed.Max;
-        }
 
         public IAbility PickAbility()
         {
