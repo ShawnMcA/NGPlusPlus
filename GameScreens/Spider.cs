@@ -1,7 +1,6 @@
 ﻿using NGPlusPlus.Core;
 using NGPlusPlus.EnemyNamespace;
 using NGPlusPlus.Interfaces;
-using NGPlusPlus.PlayerNameSpace;
 
 namespace NGPlusPlus.GameScreensNamespace
 {
@@ -16,17 +15,18 @@ namespace NGPlusPlus.GameScreensNamespace
 
         public List<List<string>> AnimationPackage()
         {
-            var package = new List<List<string>>();
-
-            package.Add(Screen1());
-            package.Add(Screen4());
-            package.Add(Screen5());
-            package.Add(Screen4());
-            package.Add(Screen1());
-            package.Add(Screen2());
-            package.Add(Screen3());
-            package.Add(Screen2());
-            package.Add(Screen1());
+            var package = new List<List<string>>
+            {
+                Screen1(),
+                Screen4(),
+                Screen5(),
+                Screen4(),
+                Screen1(),
+                Screen2(),
+                Screen3(),
+                Screen2(),
+                Screen1()
+            };
 
             return package;
         }

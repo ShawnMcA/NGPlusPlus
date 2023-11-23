@@ -1,6 +1,5 @@
 ﻿using NGPlusPlus.BattleCalculatorNamespace;
 using NGPlusPlus.Core;
-using NGPlusPlus.Data;
 using NGPlusPlus.EnemyNameSpace;
 using NGPlusPlus.Enums;
 using NGPlusPlus.Interfaces;

@@ -12,13 +12,13 @@ namespace NGPlusPlus.Data {
 
             Stats = new Stats(
                 level,
-                health: 20 * level,
-                mana: 5 * level,
-                attack: 5 * level,
-                defense: 5 * level,
-                magicAttack: 5 * level,
-                magicDefense: 5 * level,
-                speed: 5 * level
+                health: 5 * level,
+                mana: 3 * level,
+                attack: 3 * level,
+                defense: 2 * level,
+                magicAttack: 3 * level,
+                magicDefense: 2 * level,
+                speed: 3 * level
             );
 
             Abilities = AbilityShop(level);

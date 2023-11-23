@@ -37,8 +37,10 @@ namespace NGPlusPlus.SceneManagerNamespace
             var player = Player.GetInstance();
             player.InitializePlayer(name, playerClass);
 
-            var spider = new Enemy(EnemyType.Spider, "Black Widow", 1);
-            var BattleManager = new BattleManager(spider, new SpiderScreen(spider), true);
+            //var spider = new Enemy(EnemyType.Spider, "Black Widow", 1);
+            //var rat = new Enemy(EnemyType.Rat, "a smol mouse", 1);
+            var snake = new Enemy(EnemyType.Rat, "King Cobra", 1);
+            var BattleManager = new BattleManager(snake, new SnakeScreen(snake), true);
 
             TextLogger.ClearWriteTextAndWait($"{player.Name} watch out! You're being attacked....");
 

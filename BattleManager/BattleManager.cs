@@ -6,8 +6,6 @@ using NGPlusPlus.Interfaces;
 using NGPlusPlus.PlayerNameSpace;
 using NGPlusPlus.SceneManagerNamespace;
 using NGPlusPlus.ScreenRendererNamespace;
-using NGPlusPlus.StatsNamespace;
-using System.Diagnostics;
 
 namespace NGPlusPlus.BattleManagerNamespace
 {
