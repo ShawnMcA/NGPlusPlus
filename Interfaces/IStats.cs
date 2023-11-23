@@ -19,5 +19,7 @@ namespace NGPlusPlus.Interfaces
         public void ResetHealthAndMana();
         public void ResetStat(StatType type);
         public void ResetAll();
+
+        public void IncrementalStatRestore();
     }
 }

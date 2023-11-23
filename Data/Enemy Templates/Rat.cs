@@ -4,9 +4,9 @@ using NGPlusPlus.Interfaces;
 using NGPlusPlus.StatsNamespace;
 
 namespace NGPlusPlus.Data {
-    public class RatTemplate : IEnemyTemplate 
+    public class Rat : IEnemyTemplate 
     {
-        public RatTemplate(int level)
+        public Rat(int level)
         {
             ExperienceGiven = 5 * level;
 
@@ -30,10 +30,11 @@ namespace NGPlusPlus.Data {
 
         private List<IAbility> AbilityShop(int level)
         {
-            var abilities = new List<IAbility>();
-
-            abilities.Add(new Damage("Attack", TargetType.Other, DamageType.Physical, 0, level, level));
-            abilities.Add(new Damage("Strong Bite", TargetType.Other, DamageType.Physical, 0, level * 2, level * 2));
+            var abilities = new List<IAbility>
+            {
+                new Damage("Attack", TargetType.Other, DamageType.Physical, 0, level, level),
+                new Damage("Strong Bite", TargetType.Other, DamageType.Physical, 0, level * 2, level * 2)
+            };
 
             return abilities;
         }

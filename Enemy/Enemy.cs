@@ -78,14 +78,38 @@ namespace NGPlusPlus.EnemyNamespace
             Stats.Defense.Current = (int)Math.Ceiling(Stats.Defense.Max * 1.1);
         }
 
-
         public IAbility PickAbility()
         {
-            var length = Abilities.Count;
             Random rnd = new Random();
 
-            return Abilities[rnd.Next(0, length)];
+            var ability = -1;
+            var validChoice = false;
+
+            do
+            {
+                ability = rnd.Next(0, Abilities.Count);
+                validChoice = HasManaForAbility(ability);
+
+            } while (!validChoice);
+
+            return Abilities[ability];
         }
+
+        public void SpendMana(int manaSpent)
+        {
+            Stats.Mana.Current -= manaSpent;
+
+            if (Stats.Mana.Current < 0)
+                Stats.Mana.Current = 0;
+        }
+
+        private bool HasManaForAbility(int ability)
+        {
+            var isValid = Abilities[ability].ManaCost <= Stats.Mana.Current;
+
+            return isValid;
+        }
+
         #endregion "Battling"
     }
 }

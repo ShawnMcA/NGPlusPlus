@@ -24,8 +24,8 @@ namespace NGPlusPlus.PlayerNameSpace
         public CreatureType CreatureType => CreatureType.Player;
         public string Name { get; private set; }
         public PlayerClass Class { get; private set; } = PlayerClass.Knight;
-        public int Experience { get; set; }
-        public int ExperienceNeeded { get; set; }
+        public int Experience { get; private set; }
+        public int ExperienceNeeded { get; private set; }
         public IStats Stats { get; private set; }
         public List<IAbility> Abilities { get; private set; }
 
@@ -50,10 +50,7 @@ namespace NGPlusPlus.PlayerNameSpace
         {
             Class = playerClass;
 
-            var template = TemplateManager.GetPlayerTemplate(Class, 1);
-
-            Stats = template.Stats;
-            Abilities = template.Abilities;
+            SetTemplateValues(1);
         }
         #endregion "Saving/Loading"
 
@@ -65,15 +62,22 @@ namespace NGPlusPlus.PlayerNameSpace
             if (Experience >= ExperienceNeeded) LevelUp();
         }
 
-        private void LevelUp()
+        private void SetTemplateValues(int level)
         {
-            Stats.Level += 1;
-
-            var template = TemplateManager.GetPlayerTemplate(Class, Stats.Level);
+            var template = TemplateManager.GetPlayerTemplate(Class, level);
 
             ExperienceNeeded = template.ExperienceNeeded;
             Stats = template.Stats;
             Abilities = template.Abilities;
+        }
+
+        private void LevelUp()
+        {
+            Stats.Level += 1;
+
+            SetTemplateValues(Stats.Level);
+
+            TextLogger.ClearWriteTextAndWait($"Congrats!!! You've advanced to level {Stats.Level}");
         }
         #endregion "Experience/Levels"
 
@@ -116,15 +120,48 @@ namespace NGPlusPlus.PlayerNameSpace
         public IAbility PickAbility() 
         {
             int ability = 9999;
+            bool abilityValid = false;
 
             do
             {
                 TextLogger.ClearWriteText("Choose an ability...");
                 Int32.TryParse(Console.ReadLine(), out ability);
-            } while (ability <= 0 || ability > Abilities.Count);
+
+                abilityValid = AbilityInbounds(ability) && HasManaForAbility(ability);
+                
+            } while (!abilityValid);
 
             return Abilities[ability - 1];
         }
+
+        public void SpendMana(int manaSpent)
+        {
+            Stats.Mana.Current -= manaSpent;
+
+            if (Stats.Mana.Current < 0)
+                Stats.Mana.Current = 0;
+        }
+
+        private bool AbilityInbounds(int ability)
+        {
+            var isValid = ability > 0 && ability <= Abilities.Count;
+
+            if (!isValid)
+                TextLogger.InvalidInputText();
+
+            return isValid;
+        }
+
+        private bool HasManaForAbility(int ability)
+        {
+            var isValid = Abilities[ability - 1].ManaCost <= Stats.Mana.Current;
+
+            if (!isValid)
+                TextLogger.ClearWriteTextAndWait($"You do not have enough Mana for that ability.");
+
+            return isValid;
+        }
+
         #endregion "Battling"
     }
 }

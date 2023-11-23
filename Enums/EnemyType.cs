@@ -3,5 +3,6 @@
     public enum EnemyType
     {
         Rat,
+        Spider
     }
 }

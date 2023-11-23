@@ -56,34 +56,44 @@ namespace NGPlusPlus.StatsNamespace
             {
                 case StatType.Attack:
                     Attack.Current += amount;
-                    if (Attack.Current < 1)
-                        Attack.Current = 1;
+                    if (Attack.Current < 0)
+                        Attack.Current = 0;
                     break;
 
                 case StatType.Defense:
                     Defense.Current += amount;
-                    if (Defense.Current < 1)
-                        Defense.Current = 1;
+                    if (Defense.Current < 0)
+                        Defense.Current = 0;
                     break;
 
                 case StatType.MagicAttack:
                     MagicAttack.Current += amount;
-                    if (MagicAttack.Current < 1)
-                        MagicAttack.Current = 1;
+                    if (MagicAttack.Current < 0)
+                        MagicAttack.Current = 0;
                     break;
 
                 case StatType.MagicDefense:
                     MagicDefense.Current += amount;
-                    if (MagicDefense.Current < 1)
-                        MagicDefense.Current = 1;
+                    if (MagicDefense.Current < 0)
+                        MagicDefense.Current = 0;
                     break;
 
                 case StatType.Speed:
                     Speed.Current += amount;
-                    if (Speed.Current < 1)
-                        Speed.Current = 1;
+                    if (Speed.Current < 0)
+                        Speed.Current = 0;
                     break;
             }
+        }
+
+        public void IncrementalStatRestore() 
+        {
+            RestoreFractionOfMax(Mana, 5);
+            RestoreFractionOfMax(Attack, 5);
+            RestoreFractionOfMax(Defense, 5);
+            RestoreFractionOfMax(MagicAttack, 5);
+            RestoreFractionOfMax(MagicDefense, 5);
+            RestoreFractionOfMax(Speed, 5);
         }
 
         public void ResetHealthAndMana() 
@@ -129,6 +139,29 @@ namespace NGPlusPlus.StatsNamespace
             MagicAttack.Current = MagicAttack.Max;
             MagicDefense.Current = MagicDefense.Max;
             Speed.Current = Speed.Max;
+        }
+
+        private void RestoreFractionOfMax(IStat stat, int fraction) 
+        {
+            if (stat.Current == stat.Max)
+                return;
+
+            int amountToRestore = (int)Math.Ceiling((double)stat.Max / fraction);
+
+            if(stat.Current > stat.Max)
+            {
+                stat.Current -= amountToRestore;
+
+                if (stat.Current < stat.Max)
+                    stat.Current = stat.Max;
+            }
+            else
+            {
+                stat.Current += amountToRestore;
+
+                if (stat.Current > stat.Max)
+                    stat.Current = stat.Max;
+            }
         }
     }
 }

@@ -6,7 +6,7 @@ namespace NGPlusPlus.Abilities
     public class Debuff : IAbility
     {
         public string Name { get; }
-        public AbilityType AbilityType { get; } = AbilityType.Buff;
+        public AbilityType AbilityType { get; } = AbilityType.Debuff;
         public DamageType DamageType { get; } = DamageType.None;
         public TargetType TargetType { get; }
         public StatType StatType { get; }

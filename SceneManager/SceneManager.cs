@@ -5,19 +5,14 @@ using NGPlusPlus.GameScreensNamespace;
 using NGPlusPlus.Interfaces;
 using NGPlusPlus.PlayerNameSpace;
 using NGPlusPlus.ScreenRendererNamespace;
+using NGPlusPlus.BattleManagerNamespace;
 
 namespace NGPlusPlus.SceneManagerNamespace
 {
-    internal class SceneManager
+    internal static class SceneManager
     {
-        private readonly Player Player;
 
-        public SceneManager()
-        {
-            Player = Player.GetInstance();
-        }
-
-        public void PlayTitle() 
+        public static void PlayTitle() 
         {
             var titleScreen = new TitleScreen();
 
@@ -27,7 +22,7 @@ namespace NGPlusPlus.SceneManagerNamespace
             TextLogger.ClearWindow();
         }
 
-        public void PlayIntro() 
+        public static void PlayIntro() 
         {
             var intro = new Intro();
 
@@ -39,27 +34,27 @@ namespace NGPlusPlus.SceneManagerNamespace
 
             var playerClass = GetPlayerClass();
 
-            Player.InitializePlayer(name, playerClass);
+            var player = Player.GetInstance();
+            player.InitializePlayer(name, playerClass);
 
+            var spider = new Enemy(EnemyType.Spider, "Black Widow", 1);
+            var BattleManager = new BattleManager(spider, new SpiderScreen(spider), true);
+
+            TextLogger.ClearWriteTextAndWait($"{player.Name} watch out! You're being attacked....");
+
+            BattleManager.StartCoreLoop();
         }
 
-        public void PlayFightScreen(IGameScreen enemyScreen)
-        {
-            var fightScreenRenderer = new FightScreenRenderer(enemyScreen);
-            fightScreenRenderer.RenderFightScreen();
-        }
-
-        public void PlayBattleWon()
+        public static void PlayBattleWon()
         {
             var battleWon = new BattleWon();
             ScreenRenderer.RenderAnimation(battleWon);
 
-            TextLogger.ClearWriteTextAndWait("Congrats!! You made it out alive...");
-
-            Player.ResetPlayer();
+            var player = Player.GetInstance();
+            player.ResetPlayer();
         }
 
-        public void PlayGameOver()
+        public static void PlayGameOver()
         {
             var gameOver = new GameOver();
 
@@ -67,7 +62,8 @@ namespace NGPlusPlus.SceneManagerNamespace
 
             TextLogger.ClearWriteTextAndWait("Ohh no... It seems you're no longer with us. It was fun while it lasted...");
 
-            Player.ResetPlayer();
+            var player = Player.GetInstance();
+            player.ResetPlayer();
         }
 
         private static PlayerClass GetPlayerClass()

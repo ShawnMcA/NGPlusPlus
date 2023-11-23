@@ -11,37 +11,21 @@ using System.Xml.Linq;
 namespace NGPlusPlus.Core {
     public static class Core {
 
-        private static Player player;
+        private static Player Player;
 
         public static void InitializeGameSettings()
         {
             Console.SetWindowSize(GameSettings.WINDOW_WIDTH, GameSettings.WINDOW_HEIGHT);
+            Console.SetBufferSize(GameSettings.WINDOW_WIDTH, GameSettings.WINDOW_HEIGHT);
 
-            player = Player.GetInstance();
+            Player = Player.GetInstance();
         }
 
         public static void StartGameLoop() 
         {
-            var SceneManager = new SceneManager();
-
             SceneManager.PlayTitle();
 
             SceneManager.PlayIntro();
-
-            var spider = new Enemy(EnemyType.Rat, "Black Widow", 1);
-            var BattleManager = new BattleManager(spider, SceneManager, new SpiderScreen(spider), true);
-            TextLogger.ClearWriteTextAndWait("Watch out! You're being attacked....");
-            var wonBattle = BattleManager.CoreLoop();
-
-            if (wonBattle)
-            {
-                SceneManager.PlayBattleWon();
-            }
-            else
-            {
-                SceneManager.PlayGameOver();
-            }
-                
         }
 
         public static bool RestartGame() 

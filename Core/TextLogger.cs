@@ -33,6 +33,11 @@ namespace NGPlusPlus.Core
             Utilities.WaitForEnterPress();
         }
 
+        public static void InvalidInputText() 
+        {
+            ClearWriteTextAndWait("Sorry, that was an invalid choice. Please enter another option");
+        }
+
         public static void ClearWriteTextAndWait(string text) 
         {
             ClearWindow();

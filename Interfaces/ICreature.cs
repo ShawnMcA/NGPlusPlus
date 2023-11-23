@@ -19,5 +19,7 @@ namespace NGPlusPlus.Interfaces
         public void TakeDamage(int enemyAttack, DamageType damageType);
 
         public IAbility PickAbility();
+
+        public void SpendMana(int manaSpent);
     }
 }

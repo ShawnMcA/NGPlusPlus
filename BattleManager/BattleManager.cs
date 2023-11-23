@@ -5,6 +5,7 @@ using NGPlusPlus.Enums;
 using NGPlusPlus.Interfaces;
 using NGPlusPlus.PlayerNameSpace;
 using NGPlusPlus.SceneManagerNamespace;
+using NGPlusPlus.ScreenRendererNamespace;
 using NGPlusPlus.StatsNamespace;
 using System.Diagnostics;
 
@@ -16,28 +17,25 @@ namespace NGPlusPlus.BattleManagerNamespace
         private bool BattleWon = false;
 
         private Player Player;
-        private ICreature Enemy;
+        private Enemy Enemy;
 
         private List<ICreature> TurnOrder = new List<ICreature>();
 
-        private SceneManager SceneManager;
         private IGameScreen EnemyScreen;
         private bool IsAmbushed = false;
 
-        public BattleManager(ICreature enemy, SceneManager sceneManager, IGameScreen enemyScreen, bool isAmbushed = false) 
+        public BattleManager(Enemy enemy, IGameScreen enemyScreen, bool isAmbushed = false) 
         {
             Player = Player.GetInstance();
             Enemy = enemy;
-            SceneManager = sceneManager;
             EnemyScreen = enemyScreen;
             IsAmbushed = isAmbushed;
         }
 
         #region Game Loop
-        public bool CoreLoop()
+        public bool StartCoreLoop()
         {
-            SceneManager.PlayFightScreen(EnemyScreen);
-            SetTurnOrder();
+            FightScreenRenderer.RenderFightScreen(EnemyScreen);
 
             do
             {
@@ -60,6 +58,7 @@ namespace NGPlusPlus.BattleManagerNamespace
 
             } while (BattleActive);
 
+            HandleBattleWon(BattleWon);
 
             return BattleWon;
         }
@@ -74,19 +73,24 @@ namespace NGPlusPlus.BattleManagerNamespace
 
             ICreature target = GetTarget(ability.TargetType, creature.CreatureType == CreatureType.Player);
 
+            HandlePayMana(creature, ability);
+
             ResolveAction(target, creature, ability);
         }
 
         private void EndOfTurnActions()
         {
-            SceneManager.PlayFightScreen(EnemyScreen);
             CheckForDeath();
         }
 
-        private void BeginningOfRoundActions() {}
+        private void BeginningOfRoundActions() 
+        {
+            SetTurnOrder();
+        }
+
         private void EndOfRoundActions()
         {
-            //ResetStats();
+            HandleStatRestore();
         }
         #endregion Turn/Round Actions
 
@@ -94,14 +98,26 @@ namespace NGPlusPlus.BattleManagerNamespace
         #region General
         private void SetTurnOrder()
         {
+            TurnOrder = new List<ICreature>();
+
+            if(IsAmbushed)
+            {
+                IsAmbushed = false;
+
+                TextLogger.ClearWriteTextAndWait($"You were ambushed by {Enemy.Name}!!!");
+                TurnOrder.Add(Enemy);
+
+                return;
+            }
+
             if(!IsAmbushed && Player.CalculateBattleSpeed() > Enemy.CalculateBattleSpeed())
             {
-                TextLogger.ClearWriteTextAndWait($"You caught {Enemy.Name} off guard...");
                 TurnOrder.Add(Player);
                 TurnOrder.Add(Enemy);
-            } else
+            } 
+            
+            else
             {
-                TextLogger.ClearWriteTextAndWait($"You were ambushed by {Enemy.Name}!!!");
                 TurnOrder.Add(Enemy);
                 TurnOrder.Add(Player);
             }
@@ -149,6 +165,31 @@ namespace NGPlusPlus.BattleManagerNamespace
                     HandleDebuff(target, attacker, (Debuff)ability);
                     break;
             }
+
+            HandleRerender(target);
+        }
+
+        private void HandleBattleWon(bool battleWon) 
+        {
+            Player.Stats.ResetAll();
+
+            if(battleWon)
+            {
+                SceneManager.PlayBattleWon();
+                TextLogger.ClearWriteTextAndWait($"You've managed to defeat {Enemy.Name} and gained {Enemy.ExperienceGiven} experience.");
+                Player.GainExperience(Enemy.ExperienceGiven);
+            } 
+            else
+            {
+                SceneManager.PlayGameOver();
+            }
+
+        }
+
+        private void HandleStatRestore() 
+        {
+            Enemy.Stats.IncrementalStatRestore();
+            Player.Stats.IncrementalStatRestore();
         }
 
         private void HandleDamage(ICreature target, ICreature attacker, Damage ability)
@@ -175,6 +216,21 @@ namespace NGPlusPlus.BattleManagerNamespace
         {
             TextLogger.ClearWriteTextAndWait($"{attacker.Name} used {ability.Name}. {target.Name}'s {ability.StatType} is decreased by {ability.Amount}.");
             target.Stats.BuffStat(ability.StatType, ability.Amount * -1);
+        }
+
+        private void HandlePayMana(ICreature creature, IAbility ability) 
+        {
+            creature.SpendMana(ability.ManaCost);
+        }
+
+        private void HandleRerender(ICreature target)
+        {
+            if(target.CreatureType == CreatureType.Enemy)
+            {
+                FightScreenRenderer.RenderEnemyAnimation(EnemyScreen);
+            }
+
+            FightScreenRenderer.RenderStatBox();
         }
 
         private void ResetStats()

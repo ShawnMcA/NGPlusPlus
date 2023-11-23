@@ -5,54 +5,43 @@ using NGPlusPlus.Interfaces;
 
 namespace NGPlusPlus.ScreenRendererNamespace
 {
-    public class FightScreenRenderer
+    public static class FightScreenRenderer
     {
-        private static IGameScreen FightScreen;
-        private static IGameScreen StatBox;
-        private static IGameScreen AbilityMenu;
-        private static IGameScreen EnemyScreen;
-
-        public FightScreenRenderer(IGameScreen enemyScreen) {
-            FightScreen = new FightScreen();
-            StatBox = new StatBox();
-            AbilityMenu = new AbilityMenu();
-            EnemyScreen = enemyScreen;
-        }
-
-        public void RenderFightScreen()
+        public static void RenderFightScreen(IGameScreen enemyScreen)
         {
             RenderBackground();
             RenderStatBox();
             RenderActionBox();
-            RenderEnemyAnimation();
+            RenderEnemyAnimation(enemyScreen);
         }
 
-        private void RenderBackground()
+        public static void RenderBackground()
         {
-            ScreenRenderer.RenderScreen(FightScreen.Screen1());
+
+            ScreenRenderer.RenderScreen(new FightScreen().Screen1());
         }
 
-        private void RenderStatBox() 
+        public static void RenderStatBox() 
         {
-            ScreenRenderer.RenderSection(StatBox.Screen1(),
+            ScreenRenderer.RenderSection(new StatBox().Screen1(),
                 GameSettings.COMBAT_STATS_WINDOW_START_LEFT,
                 GameSettings.COMBAT_STATS_WINDOW_START_TOP,
                 GameSettings.COMBAT_STATS_WINDOW_WIDTH,
                 GameSettings.COMBAT_STATS_WINDOW_HEIGHT);
         }
 
-        private void RenderActionBox()
+        public static void RenderActionBox()
         {
-            ScreenRenderer.RenderSection(AbilityMenu.Screen1(),
+            ScreenRenderer.RenderSection(new AbilityMenu().Screen1(),
                 GameSettings.COMBAT_ACTION_WINDOW_START_LEFT,
                 GameSettings.COMBAT_ACTION_WINDOW_START_TOP,
                 GameSettings.COMBAT_ACTION_WIDOW_WIDTH,
                 GameSettings.COMBAT_ACTION_WINDOW_HEIGHT);
         }
 
-        private void RenderEnemyAnimation()
+        public static void RenderEnemyAnimation(IGameScreen enemyScreen)
         {
-            ScreenRenderer.RenderAnimation(EnemyScreen,
+            ScreenRenderer.RenderAnimation(enemyScreen,
                 GameSettings.COMBAT_ENEMY_WINDOW_START_LEFT,
                 GameSettings.COMBAT_ENEMY_WINDOW_START_TOP,
                 GameSettings.COMBAT_ENEMY_WIDOW_WIDTH,

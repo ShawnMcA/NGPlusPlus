@@ -10,8 +10,9 @@ namespace NGPlusPlus.EnemyNameSpace
         {
             return enemyType switch
             {
-                EnemyType.Rat => new RatTemplate(level),
-                _ => new RatTemplate(level)
+                EnemyType.Rat => new Rat(level),
+                EnemyType.Spider => new Spider(level),
+                _ => new Rat(level)
             };
         }
     }
