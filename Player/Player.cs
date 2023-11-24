@@ -64,7 +64,7 @@ namespace NGPlusPlus.PlayerNameSpace
 
         private void SetTemplateValues(int level)
         {
-            var template = TemplateManager.GetPlayerTemplate(Class, level);
+            var template = PlayerTemplateManager.GetPlayerTemplate(Class, level);
 
             ExperienceNeeded = template.ExperienceNeeded;
             Stats = template.Stats;

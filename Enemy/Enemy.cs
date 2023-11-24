@@ -1,4 +1,5 @@
-﻿using NGPlusPlus.BattleCalculatorNamespace;
+﻿using NGPlusPlus.Abilities;
+using NGPlusPlus.BattleCalculatorNamespace;
 using NGPlusPlus.Core;
 using NGPlusPlus.EnemyNameSpace;
 using NGPlusPlus.Enums;
@@ -20,9 +21,9 @@ namespace NGPlusPlus.EnemyNamespace
         public Guid Guid { get; private set; }
 
         public CreatureType CreatureType => CreatureType.Enemy;
-        public EnemyType Type { get; set; } // Update in editor
-        public string Name { get; set; } // Update in editor
-        public int Level { get; set; } // Update in editor
+        public EnemyType Type { get; set; }
+        public string Name { get; set; }
+        public int Level { get; set; }
         public int ExperienceGiven { get; private set; }
         public IStats Stats { get; private set; }
         public List<IAbility> Abilities { get; private set; }
@@ -32,7 +33,7 @@ namespace NGPlusPlus.EnemyNamespace
         #region "Saving/Loading"
         private void InitializeEnemy()
         {
-            var template = TemplateManager.GetEnemyTemplate(Type, Level);
+            var template = EnemyTemplateManager.GetEnemyTemplate(Type, Level);
 
             Guid = Guid.NewGuid();
             ExperienceGiven = template.ExperienceGiven;
@@ -87,7 +88,7 @@ namespace NGPlusPlus.EnemyNamespace
             do
             {
                 ability = rnd.Next(0, Abilities.Count);
-                validChoice = HasManaForAbility(ability);
+                validChoice = CheckIsValidAbility(ability);
 
             } while (!validChoice);
 
@@ -100,6 +101,21 @@ namespace NGPlusPlus.EnemyNamespace
 
             if (Stats.Mana.Current < 0)
                 Stats.Mana.Current = 0;
+        }
+
+        private bool CheckIsValidAbility(int ability) 
+        {
+            var isValid = HasManaForAbility(ability);
+
+            if (isValid)
+                isValid = !IsHealWithFullHealth(ability);
+
+            return isValid;
+        }
+
+        private bool IsHealWithFullHealth(int ability)
+        {
+            return Stats.IsFullHealth() && Abilities[ability].AbilityType == AbilityType.Heal;
         }
 
         private bool HasManaForAbility(int ability)

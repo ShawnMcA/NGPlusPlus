@@ -33,7 +33,7 @@ namespace NGPlusPlus.BattleManagerNamespace
         #region Game Loop
         public bool StartCoreLoop()
         {
-            FightScreenRenderer.RenderFightScreen(EnemyScreen);
+            BattleScreenRenderer.RenderFightScreen(EnemyScreen);
 
             do
             {
@@ -173,13 +173,13 @@ namespace NGPlusPlus.BattleManagerNamespace
 
             if(battleWon)
             {
-                SceneManager.PlayBattleWon();
+                BattleSceneManager.PlayBattleWon();
                 TextLogger.ClearWriteTextAndWait($"You've managed to defeat {Enemy.Name} and gained {Enemy.ExperienceGiven} experience.");
                 Player.GainExperience(Enemy.ExperienceGiven);
             } 
             else
             {
-                SceneManager.PlayGameOver();
+                BattleSceneManager.PlayGameOver();
             }
 
         }
@@ -225,10 +225,10 @@ namespace NGPlusPlus.BattleManagerNamespace
         {
             if(target.CreatureType == CreatureType.Enemy)
             {
-                FightScreenRenderer.RenderEnemyAnimation(EnemyScreen);
+                BattleScreenRenderer.RenderEnemyAnimation(EnemyScreen);
             }
 
-            FightScreenRenderer.RenderStatBox();
+            BattleScreenRenderer.RenderStatBox();
         }
 
         private void ResetStats()

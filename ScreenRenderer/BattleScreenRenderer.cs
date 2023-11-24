@@ -1,11 +1,11 @@
-﻿using NGPlusPlus.EnemyNamespace;
+﻿using NGPlusPlus.GameScreens.Core;
 using NGPlusPlus.GameScreensNamespace;
 using NGPlusPlus.GameSettingsNamespace;
 using NGPlusPlus.Interfaces;
 
 namespace NGPlusPlus.ScreenRendererNamespace
 {
-    public static class FightScreenRenderer
+    public static class BattleScreenRenderer
     {
         public static void RenderFightScreen(IGameScreen enemyScreen)
         {

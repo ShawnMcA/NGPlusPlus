@@ -4,7 +4,7 @@ using NGPlusPlus.Interfaces;
 
 namespace NGPlusPlus.PlayerNameSpace
 {
-    public static class TemplateManager
+    public static class PlayerTemplateManager
     {
         public static IPlayerTemplate GetPlayerTemplate(PlayerClass playerClass, int level) 
         {

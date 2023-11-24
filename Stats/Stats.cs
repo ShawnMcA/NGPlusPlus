@@ -33,6 +33,7 @@ namespace NGPlusPlus.StatsNamespace
         public IStat MagicDefense { get; set; }
         public IStat Speed { get; set; }
         public bool IsDead() => Health.Current <= 0;
+        public bool IsFullHealth() => Health.Current == Health.Max;
 
         public void RestoreHealth(int healthGained) 
         {

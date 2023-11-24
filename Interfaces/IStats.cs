@@ -13,6 +13,7 @@ namespace NGPlusPlus.Interfaces
         public IStat MagicDefense { get; set; }
         public IStat Speed { get; set; }
         public bool IsDead();
+        public bool IsFullHealth();
         public void RestoreHealth(int healthGained);
         public void RestoreMana(int manaGained);
         public void BuffStat(StatType statType, int amount);

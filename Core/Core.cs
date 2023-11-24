@@ -1,12 +1,6 @@
-﻿using NGPlusPlus.BattleManagerNamespace;
-using NGPlusPlus.EnemyNamespace;
-using NGPlusPlus.Enums;
-using NGPlusPlus.GameScreensNamespace;
-using NGPlusPlus.GameSettingsNamespace;
+﻿using NGPlusPlus.GameSettingsNamespace;
 using NGPlusPlus.PlayerNameSpace;
 using NGPlusPlus.SceneManagerNamespace;
-using NGPlusPlus.ScreenRendererNamespace;
-using System.Xml.Linq;
 
 namespace NGPlusPlus.Core {
     public static class Core {

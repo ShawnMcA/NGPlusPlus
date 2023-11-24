@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NGPlusPlus.GameScreensNamespace
+namespace NGPlusPlus.GameScreens.Scenes
 {
     internal class Intro : IGameScreen
     {

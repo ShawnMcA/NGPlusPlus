@@ -2,10 +2,10 @@
 using NGPlusPlus.EnemyNamespace;
 using NGPlusPlus.Enums;
 using NGPlusPlus.GameScreensNamespace;
-using NGPlusPlus.Interfaces;
 using NGPlusPlus.PlayerNameSpace;
 using NGPlusPlus.ScreenRendererNamespace;
 using NGPlusPlus.BattleManagerNamespace;
+using NGPlusPlus.GameScreens.Scenes;
 
 namespace NGPlusPlus.SceneManagerNamespace
 {
@@ -37,35 +37,9 @@ namespace NGPlusPlus.SceneManagerNamespace
             var player = Player.GetInstance();
             player.InitializePlayer(name, playerClass);
 
-            //var spider = new Enemy(EnemyType.Spider, "Black Widow", 1);
-            //var rat = new Enemy(EnemyType.Rat, "a smol mouse", 1);
-            var snake = new Enemy(EnemyType.Rat, "King Cobra", 1);
-            var BattleManager = new BattleManager(snake, new SnakeScreen(snake), true);
-
             TextLogger.ClearWriteTextAndWait($"{player.Name} watch out! You're being attacked....");
 
-            BattleManager.StartCoreLoop();
-        }
-
-        public static void PlayBattleWon()
-        {
-            var battleWon = new BattleWon();
-            ScreenRenderer.RenderAnimation(battleWon);
-
-            var player = Player.GetInstance();
-            player.ResetPlayer();
-        }
-
-        public static void PlayGameOver()
-        {
-            var gameOver = new GameOver();
-
-            ScreenRenderer.RenderAnimation(gameOver);
-
-            TextLogger.ClearWriteTextAndWait("Ohh no... It seems you're no longer with us. It was fun while it lasted...");
-
-            var player = Player.GetInstance();
-            player.ResetPlayer();
+            BattleSceneManager.StartBattle(EnemyType.Rat, "Small Mouse", 1, true);
         }
 
         private static PlayerClass GetPlayerClass()
