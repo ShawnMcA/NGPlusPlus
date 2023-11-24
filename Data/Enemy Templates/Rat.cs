@@ -22,7 +22,7 @@ namespace NGPlusPlus.Data {
             );
 
             Abilities = AbilityShop(level);
-        }
+        } 
 
         public int ExperienceGiven { get; private set; }
         public IStats Stats { get; private set; }
