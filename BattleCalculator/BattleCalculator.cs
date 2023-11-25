@@ -10,17 +10,24 @@
             return currentSpeed;
         }
 
-        public static int CalculateDamageOutput(int rangeLow, int rangeHigh, int attack)
+        public static int CalculateDamageOutput(int baseDamage, int accuracy, int attack)
         {
             Random rnd = new Random();
-            return rnd.Next(rangeLow, rangeHigh + 1) + attack; // TODO: Apply the secret sauce.
+            var hitRoll = rnd.Next(0, 101);
+
+            var damage = (int)Math.Ceiling(baseDamage * (attack / 100m));
+
+            return hitRoll <= accuracy ? damage : 0; // TODO: Apply the secret sauce.
         }
 
         public static int CalculateDamageInput(int damage, int defense)
         {
-            var total = damage - defense; // TODO: Apply the secret sauce.
+            if (damage <= 0)
+                return 0;
 
-            return total > 0 ? total : 1;
+            var total = (int)Math.Floor(damage * ((100 - defense) / 100m));// TODO: Apply the secret sauce.
+
+            return total > 0 ? total : 0;
         }
     }
 }

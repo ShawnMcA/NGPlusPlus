@@ -13,13 +13,13 @@ namespace NGPlusPlus.Data
 
             Stats = new Stats(
                 level,
-                health: 8 * level,
-                mana: 5 * level,
-                attack: 2 * level,
-                defense: 3 * level,
-                magicAttack: 6 * level,
-                magicDefense: 5 * level,
-                speed: 5 * level
+                health: 70 + (10 * level),
+                mana: 6 + level,
+                attack: 10 * level,
+                defense: 7 + 5 * level,
+                magicAttack: 15 * level,
+                magicDefense: 15 * level,
+                speed: 6 * level
             );
 
             Abilities = AbilityShop(level);
@@ -33,8 +33,8 @@ namespace NGPlusPlus.Data
         {
             var abilities = new List<IAbility>
             {
-                new Damage("Attack", TargetType.Other, DamageType.Physical, 0, level, level + (1 * level)),
-                new Damage("Flare", TargetType.Other, DamageType.Magic, 3 * level, 0, 2 * level)
+                new Damage("Bonk!", TargetType.Other, DamageType.Physical, 0, 100, 95),
+                new Damage("Flare", TargetType.Other, DamageType.Magic, 3 * level, 120, 85)
             };
 
             if (level >= 3)
@@ -44,12 +44,12 @@ namespace NGPlusPlus.Data
 
             if (level >= 5)
             {
-                abilities.Add(new Damage("Fire Ball", TargetType.Other, DamageType.Magic, 5 * level, 3 * level, 5 * level));
+                abilities.Add(new Damage("Fire Ball", TargetType.Other, DamageType.Magic, 5 * level, 4, 80));
             }
 
             if (level >= 9)
             {
-                abilities.Add(new Damage("Meteor", TargetType.OtherAll, DamageType.Magic, 10 * level, 5 * level, 8 * level));
+                abilities.Add(new Damage("Meteor", TargetType.OtherAll, DamageType.Magic, 10 * level, 6, 70));
             }
 
             return abilities;

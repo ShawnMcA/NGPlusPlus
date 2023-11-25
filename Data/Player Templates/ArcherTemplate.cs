@@ -13,12 +13,12 @@ namespace NGPlusPlus.Data
 
             Stats = new Stats(
                 level,
-                health: 10 * level,
-                mana: 3 * level,
-                attack: 5 * level,
-                defense: 3 * level,
+                health: 80 + (10 * level),
+                mana: 2 + level,
+                attack: 15 * level,
+                defense: 10 + 5 * level,
                 magicAttack: 3 * level,
-                magicDefense: 3 * level,
+                magicDefense: 4 * level,
                 speed: 6 * level
             );
 
@@ -33,7 +33,7 @@ namespace NGPlusPlus.Data
         {
             var abilities = new List<IAbility>
             {
-                new Damage("Attack", TargetType.Other, DamageType.Physical, 0, level, level + (1 * level)),
+                new Damage("Weak Shot", TargetType.Other, DamageType.Physical, 0, 1, 95),
                 new Buff("Attack Up", TargetType.Self, StatType.Attack, 2 * level, 2 * level)
             };
 
@@ -44,12 +44,12 @@ namespace NGPlusPlus.Data
 
             if (level >= 5)
             {
-                abilities.Add(new Damage("Wild Shot", TargetType.Other, DamageType.Physical, 0, 0, 3 * level));
+                abilities.Add(new Damage("Wild Shot", TargetType.Other, DamageType.Physical, 0, 3, 70));
             }
 
             if (level >= 9)
             {
-                abilities.Add(new Damage("Ohh Hail No", TargetType.OtherAll, DamageType.Physical, 5 * level, 5 * level, 8 * level));
+                abilities.Add(new Damage("Ohh Hail No", TargetType.OtherAll, DamageType.Physical, 5 * level, 5, 85));
             }
 
             return abilities;

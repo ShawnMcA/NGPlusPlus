@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace NGPlusPlus.Core {
     public class Startup {
@@ -32,13 +31,12 @@ namespace NGPlusPlus.Core {
 
             Core.InitializeGameSettings();
 
-            var gamerunning = true;
+            var isPlaying = true;
 
             do
             {
-                Core.StartGameLoop();
-                gamerunning = Core.RestartGame();
-            } while (gamerunning);
+                isPlaying = Core.StartGameLoop();
+            } while (isPlaying);
         }
     }
 }

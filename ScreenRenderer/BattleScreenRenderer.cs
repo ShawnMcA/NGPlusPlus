@@ -23,7 +23,7 @@ namespace NGPlusPlus.ScreenRendererNamespace
 
         public static void RenderStatBox() 
         {
-            ScreenRenderer.RenderSection(new StatBox().Screen1(),
+            ScreenRenderer.RenderSection(new StatBoxScreen().Screen1(),
                 GameSettings.COMBAT_STATS_WINDOW_START_LEFT,
                 GameSettings.COMBAT_STATS_WINDOW_START_TOP,
                 GameSettings.COMBAT_STATS_WINDOW_WIDTH,
@@ -32,7 +32,7 @@ namespace NGPlusPlus.ScreenRendererNamespace
 
         public static void RenderActionBox()
         {
-            ScreenRenderer.RenderSection(new AbilityMenu().Screen1(),
+            ScreenRenderer.RenderSection(new AbilityMenuScreen().Screen1(),
                 GameSettings.COMBAT_ACTION_WINDOW_START_LEFT,
                 GameSettings.COMBAT_ACTION_WINDOW_START_TOP,
                 GameSettings.COMBAT_ACTION_WIDOW_WIDTH,

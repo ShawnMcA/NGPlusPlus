@@ -1,11 +1,10 @@
 ﻿using NGPlusPlus.Abilities;
 using NGPlusPlus.Core;
-using NGPlusPlus.EnemyNamespace;
 using NGPlusPlus.Enums;
 using NGPlusPlus.Interfaces;
+using NGPlusPlus.MiscClasses;
 using NGPlusPlus.PlayerNameSpace;
 using NGPlusPlus.SceneManagerNamespace;
-using NGPlusPlus.ScreenRendererNamespace;
 
 namespace NGPlusPlus.BattleManagerNamespace
 {
@@ -15,26 +14,22 @@ namespace NGPlusPlus.BattleManagerNamespace
         private bool BattleWon = false;
 
         private Player Player;
-        private Enemy Enemy;
+        private EnemyPackage EnemyPackage;
 
         private List<ICreature> TurnOrder = new List<ICreature>();
 
-        private IGameScreen EnemyScreen;
         private bool IsAmbushed = false;
 
-        public BattleManager(Enemy enemy, IGameScreen enemyScreen, bool isAmbushed = false) 
+        public BattleManager(EnemyPackage enemyPackage, bool isAmbushed = false) 
         {
             Player = Player.GetInstance();
-            Enemy = enemy;
-            EnemyScreen = enemyScreen;
+            EnemyPackage = enemyPackage;
             IsAmbushed = isAmbushed;
         }
 
         #region Game Loop
         public bool StartCoreLoop()
         {
-            BattleScreenRenderer.RenderFightScreen(EnemyScreen);
-
             do
             {
                 BeginningOfRoundActions();
@@ -56,7 +51,7 @@ namespace NGPlusPlus.BattleManagerNamespace
 
             } while (BattleActive);
 
-            HandleBattleWon(BattleWon);
+            Player.Stats.ResetAll();
 
             return BattleWon;
         }
@@ -102,29 +97,29 @@ namespace NGPlusPlus.BattleManagerNamespace
             {
                 IsAmbushed = false;
 
-                TextLogger.ClearWriteTextAndWait($"You were ambushed by {Enemy.Name}!!!");
-                TurnOrder.Add(Enemy);
+                TextLogger.ClearWriteTextAndWait($"You were ambushed by {EnemyPackage.Enemy.Name}!!!");
+                TurnOrder.Add(EnemyPackage.Enemy);
 
                 return;
             }
 
-            if(!IsAmbushed && Player.CalculateBattleSpeed() > Enemy.CalculateBattleSpeed())
+            if(!IsAmbushed && Player.CalculateBattleSpeed() > EnemyPackage.Enemy.CalculateBattleSpeed())
             {
                 TurnOrder.Add(Player);
-                TurnOrder.Add(Enemy);
+                TurnOrder.Add(EnemyPackage.Enemy);
             } 
             
             else
             {
-                TurnOrder.Add(Enemy);
+                TurnOrder.Add(EnemyPackage.Enemy);
                 TurnOrder.Add(Player);
             }
         }
 
         private void CheckForDeath()
         {
-            BattleActive = !Player.Stats.IsDead() && !Enemy.Stats.IsDead();
-            BattleWon = !Player.Stats.IsDead() && Enemy.Stats.IsDead();
+            BattleActive = !Player.Stats.IsDead() && !EnemyPackage.Enemy.Stats.IsDead();
+            BattleWon = !Player.Stats.IsDead() && EnemyPackage.Enemy.Stats.IsDead();
 
             return;
         }
@@ -137,10 +132,10 @@ namespace NGPlusPlus.BattleManagerNamespace
             {
                 case TargetType.Self:
                 case TargetType.SelfAll:
-                    return isPlayer ? Player : Enemy;
+                    return isPlayer ? Player : EnemyPackage.Enemy;
                 case TargetType.Other:
                 case TargetType.OtherAll:
-                    return isPlayer ? Enemy : Player;
+                    return isPlayer ? EnemyPackage.Enemy : Player;
             }
 
             return null;
@@ -167,35 +162,26 @@ namespace NGPlusPlus.BattleManagerNamespace
             HandleRerender(target);
         }
 
-        private void HandleBattleWon(bool battleWon) 
-        {
-            Player.Stats.ResetAll();
-
-            if(battleWon)
-            {
-                BattleSceneManager.PlayBattleWon();
-                TextLogger.ClearWriteTextAndWait($"You've managed to defeat {Enemy.Name} and gained {Enemy.ExperienceGiven} experience.");
-                Player.GainExperience(Enemy.ExperienceGiven);
-            } 
-            else
-            {
-                BattleSceneManager.PlayGameOver();
-            }
-
-        }
-
         private void HandleStatRestore() 
         {
-            Enemy.Stats.IncrementalStatRestore();
+            EnemyPackage.Enemy.Stats.IncrementalStatRestore();
             Player.Stats.IncrementalStatRestore();
         }
 
         private void HandleDamage(ICreature target, ICreature attacker, Damage ability)
         {
-            var damage = attacker.CalculateDamageOutput(ability.RangeLow, ability.RangeHigh, ability.DamageType);
+            var damage = attacker.CalculateDamageOutput(ability.BaseDamage, ability.Accuracy, ability.DamageType);
 
-            TextLogger.ClearWriteTextAndWait($"{attacker.Name} used {ability.Name} and swings for {damage}.");
-            target.TakeDamage(damage, ability.DamageType);
+            if(damage > 0)
+            {
+                TextLogger.ClearWriteTextAndWait($"{attacker.Name} used {ability.Name} and swings for {damage}.");
+                target.TakeDamage(damage, ability.DamageType);
+            }
+                
+            else
+            {
+                TextLogger.ClearWriteTextAndWait($"{attacker.Name} used {ability.Name}... But the attack missed...");
+            }
         }
 
         private void HandleHeal(ICreature target, ICreature attacker, Heal ability)
@@ -223,18 +209,18 @@ namespace NGPlusPlus.BattleManagerNamespace
 
         private void HandleRerender(ICreature target)
         {
-            if(target.CreatureType == CreatureType.Enemy)
-            {
-                BattleScreenRenderer.RenderEnemyAnimation(EnemyScreen);
-            }
+            BattleSceneManager.RerenderStats();
 
-            BattleScreenRenderer.RenderStatBox();
+            if (target.CreatureType == CreatureType.Enemy)
+            {
+                BattleSceneManager.RerenderEnemy(EnemyPackage);
+            }
         }
 
         private void ResetStats()
         {
             Player.Stats.ResetAll();
-            Enemy.Stats.ResetAll();
+            EnemyPackage.Enemy.Stats.ResetAll();
         }
         #endregion Battle Actions
     }

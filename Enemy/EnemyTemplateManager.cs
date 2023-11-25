@@ -4,24 +4,37 @@ using NGPlusPlus.Enums;
 using NGPlusPlus.GameScreens.Enemies;
 using NGPlusPlus.GameScreensNamespace;
 using NGPlusPlus.Interfaces;
-using System.Reflection.Emit;
+using NGPlusPlus.MiscClasses;
 
 namespace NGPlusPlus.EnemyNameSpace
 {
     public static class EnemyTemplateManager
     {
-        public static IEnemyTemplate GetEnemyTemplate(EnemyType enemyType, int level) 
+        public static EnemyPackage GenerateEnemyPackage(EnemyType enemyType, string name, int level)
         {
-            return enemyType switch
+            var enemyTemplate = GetEnemyTemplate(enemyType, level);
+            var enemy = new Enemy(enemyType, enemyTemplate, name, level);
+            var gameScreen = GetEnemyGameScreen(enemy);
+
+            return new EnemyPackage
             {
-                EnemyType.Rat => new Rat(level),
-                EnemyType.Spider => new Spider(level),
-                EnemyType.Snake => new Snake(level),
-                _ => new Rat(level)
+                Enemy = enemy,
+                EnemyScreen = gameScreen
             };
         }
 
-        public static IGameScreen GetEnemyGameScreen(Enemy enemy)
+        private static IEnemyTemplate GetEnemyTemplate(EnemyType enemyType, int level) 
+        {
+            return enemyType switch
+            {
+                EnemyType.Rat => new RatTemplate(level),
+                EnemyType.Spider => new SpiderTemplate(level),
+                EnemyType.Snake => new SnakeTemplate(level),
+                _ => new RatTemplate(level)
+            };
+        }
+
+        private static IGameScreen GetEnemyGameScreen(Enemy enemy)
         {
             return enemy.Type switch
             {

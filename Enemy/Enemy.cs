@@ -1,7 +1,5 @@
-﻿using NGPlusPlus.Abilities;
-using NGPlusPlus.BattleCalculatorNamespace;
+﻿using NGPlusPlus.BattleCalculatorNamespace;
 using NGPlusPlus.Core;
-using NGPlusPlus.EnemyNameSpace;
 using NGPlusPlus.Enums;
 using NGPlusPlus.Interfaces;
 
@@ -9,9 +7,10 @@ namespace NGPlusPlus.EnemyNamespace
 {
     public class Enemy : ICreature
     {
-        public Enemy(EnemyType type, string name, int level) 
+        public Enemy(EnemyType type, IEnemyTemplate template, string name, int level) 
         {
             Type = type;
+            Template = template;
             Level = level;
             Name = name;
             InitializeEnemy();
@@ -19,8 +18,8 @@ namespace NGPlusPlus.EnemyNamespace
 
         #region "Properties"
         public Guid Guid { get; private set; }
-
         public CreatureType CreatureType => CreatureType.Enemy;
+        private IEnemyTemplate Template { get; set; }
         public EnemyType Type { get; set; }
         public string Name { get; set; }
         public int Level { get; set; }
@@ -33,12 +32,10 @@ namespace NGPlusPlus.EnemyNamespace
         #region "Saving/Loading"
         private void InitializeEnemy()
         {
-            var template = EnemyTemplateManager.GetEnemyTemplate(Type, Level);
-
             Guid = Guid.NewGuid();
-            ExperienceGiven = template.ExperienceGiven;
-            Stats = template.Stats;
-            Abilities = template.Abilities;
+            ExperienceGiven = Template.ExperienceGiven;
+            Stats = Template.Stats;
+            Abilities = Template.Abilities;
         }
         #endregion "Saving/Loading"
 
@@ -62,7 +59,8 @@ namespace NGPlusPlus.EnemyNamespace
                 damageType == DamageType.Physical ? Stats.Defense.Current : Stats.MagicDefense.Current
             );
 
-            TextLogger.ClearWriteTextAndWait($"{Name} blocks {enemyAttack - damage} damage and takes {damage}.");
+            if(damage > 0)
+                TextLogger.ClearWriteTextAndWait($"{Name} blocks {enemyAttack - damage} damage and takes {damage}.");
 
             Stats.Health.Current -= damage;
 

@@ -13,11 +13,11 @@ namespace NGPlusPlus.Data
 
             Stats = new Stats(
                 level, 
-                health: 12 * level,
-                mana: 3 * level,
-                attack: 4 * level,
-                defense: 5 * level,
-                magicAttack: 2 * level,
+                health: 90 + (10 * level),
+                mana: 2 + level,
+                attack: 10 * level,
+                defense: 20 + 5 * level,
+                magicAttack: 3 * level,
                 magicDefense: 4 * level,
                 speed: 4 * level
             );
@@ -33,8 +33,8 @@ namespace NGPlusPlus.Data
         {
             var abilities = new List<IAbility>
             {
-                new Damage("Attack", TargetType.Other, DamageType.Physical, 0, level, level + (1 * level)),
-                new Buff("Defense Up", TargetType.Self, StatType.Defense, 2 * level, 2 * level)
+                new Damage("Quick Stab", TargetType.Other, DamageType.Physical, 0, 100, 90),
+                new Buff("Defense Up", TargetType.Self, StatType.Defense, 3, 15)
             };
 
             if (level >= 3)
@@ -44,12 +44,12 @@ namespace NGPlusPlus.Data
 
             if (level >= 5)
             {
-                abilities.Add(new Damage("Heavy Swing", TargetType.Other, DamageType.Physical, 3 * level, 3 * level, 5 * level));
+                abilities.Add(new Damage("Heavy Swing", TargetType.Other, DamageType.Physical, 3 * level, 5, 70));
             }
 
             if (level >= 9)
             {
-                abilities.Add(new Damage("Spear Wall", TargetType.OtherAll, DamageType.Physical, 4 * level, 5 * level, 8 * level));
+                abilities.Add(new Damage("Spear Wall", TargetType.OtherAll, DamageType.Physical, 4 * level, 9, 80));
             }
 
             return abilities;

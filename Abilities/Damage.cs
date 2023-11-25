@@ -10,17 +10,17 @@ namespace NGPlusPlus.Abilities
         public DamageType DamageType { get; }
         public TargetType TargetType { get; }
         public int ManaCost { get; }
-        public int RangeLow { get; }
-        public int RangeHigh { get; }
+        public int BaseDamage { get; }
+        public int Accuracy { get; }
 
-        public Damage(string name, TargetType targetType, DamageType damagetype, int manaCost, int rangeLow, int rangeHigh) 
+        public Damage(string name, TargetType targetType, DamageType damagetype, int manaCost, int baseDamage, int accuracy) 
         { 
             Name = name;
             TargetType = targetType;
             DamageType = damagetype;
             ManaCost = manaCost;
-            RangeLow = rangeLow;
-            RangeHigh = rangeHigh;
+            BaseDamage = baseDamage;
+            Accuracy = accuracy;
         }
     }
 }

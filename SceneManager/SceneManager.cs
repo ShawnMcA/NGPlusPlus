@@ -1,82 +1,54 @@
-﻿using NGPlusPlus.Core;
-using NGPlusPlus.EnemyNamespace;
-using NGPlusPlus.Enums;
-using NGPlusPlus.GameScreensNamespace;
-using NGPlusPlus.PlayerNameSpace;
-using NGPlusPlus.ScreenRendererNamespace;
-using NGPlusPlus.BattleManagerNamespace;
-using NGPlusPlus.GameScreens.Scenes;
+﻿using NGPlusPlus.Enums;
 
 namespace NGPlusPlus.SceneManagerNamespace
 {
     internal static class SceneManager
     {
+        private static Scenes CURRENT_SCENE = Scenes.Title;
 
-        public static void PlayTitle() 
+        public static void PlayNextScene()
         {
-            var titleScreen = new TitleScreen();
-
-            ScreenRenderer.RenderAnimation(titleScreen);
-
-            TextLogger.ClearWriteTextAndWait("Press any key to start your adventure...");
-            TextLogger.ClearWindow();
+            PlayScene(CURRENT_SCENE);
+            CURRENT_SCENE++;
         }
 
-        public static void PlayIntro() 
+        public static void SkipToScene(Scenes scene) 
         {
-            var intro = new Intro();
+            CURRENT_SCENE = scene;
 
-            ScreenRenderer.RenderAnimation(intro);
-
-            TextLogger.ClearWriteTextAndWait("Welcome to nowhere... Hope you aren't lost...");
-
-            var name = GetPlayerName();
-
-            var playerClass = GetPlayerClass();
-
-            var player = Player.GetInstance();
-            player.InitializePlayer(name, playerClass);
-
-            TextLogger.ClearWriteTextAndWait($"{player.Name} watch out! You're being attacked....");
-
-            BattleSceneManager.StartBattle(EnemyType.Rat, "Small Mouse", 1, true);
+            PlayNextScene();
         }
 
-        private static PlayerClass GetPlayerClass()
+        public static void ResetSceneManager()
         {
-            int classType;
+            CURRENT_SCENE = Scenes.Title;
+        }
 
-            var enumNames = Enum.GetNames(typeof(PlayerClass));
+        public static bool IsFinalScene()
+        {
+            var finalScene = Enum.GetValues(typeof(Scenes)).Cast<int>().Max();
 
-            do
+            return (int)CURRENT_SCENE == finalScene + 1;
+        }
+
+        private static void PlayScene(Scenes scene)
+        {
+            switch (scene)
             {
-                TextLogger.ClearWriteText("What playstyle would you prefer for this adventure?");
-
-                for (var i = 0; i < enumNames.Length; i++)
-                {
-                    TextLogger.WriteText($"{i + 1}) {enumNames[i]}");
-                }
-
-                int.TryParse(Console.ReadLine(), out classType);
-            } while (classType <= 0 || classType > enumNames.Length);
-
-            return (PlayerClass)classType - 1;
-        }
-
-        private static string GetPlayerName()
-        {
-            TextLogger.ClearWriteText("What is your name?");
-            var name = Console.ReadLine();
-
-            while (string.IsNullOrEmpty(name))
-            {
-                TextLogger.ClearWriteText("Sorry, you must enter a name: ");
-                name = Console.ReadLine();
+                case Scenes.Title: TitleSceneManager.PlayTitle(); break;
+                case Scenes.Intro: IntroSceneManager.PlayIntro(); break;
+                case Scenes.BedroomStart: BedroomSceneManager.PlayBedroomStart(); break;
+                case Scenes.BedroomAfter: BedroomSceneManager.PlayBedroomAfter(); break;
+                default: break;
             }
+        }
 
-            TextLogger.ClearWriteTextAndWait($"Hello {name}!!");
-
-            return name;
+        public static void PlayMiscScene(MiscScenes scene)
+        {
+            switch (scene)
+            {
+                default: break;
+            }
         }
     }
 }

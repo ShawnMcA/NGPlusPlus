@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NGPlusPlus.GameScreensNamespace
 {
-    internal class GameOver : IGameScreen
+    internal class GameOverScreen : IGameScreen
     {
         public int AnimationSpeed => 300;
         public List<List<string>> AnimationPackage()

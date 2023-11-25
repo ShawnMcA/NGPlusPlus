@@ -87,10 +87,10 @@ namespace NGPlusPlus.PlayerNameSpace
             return BattleCalculator.CalculateSpeed(Stats.Speed.Current);
         }
 
-        public int CalculateDamageOutput(int rangeLow, int rangeHigh, DamageType damageType) 
+        public int CalculateDamageOutput(int baseDamage, int accuracy, DamageType damageType) 
         {
-            return BattleCalculator.CalculateDamageOutput(rangeLow, 
-                rangeHigh, 
+            return BattleCalculator.CalculateDamageOutput(baseDamage,
+                accuracy, 
                 damageType == DamageType.Physical ? Stats.Attack.Current : Stats.MagicAttack.Current
             );
         }

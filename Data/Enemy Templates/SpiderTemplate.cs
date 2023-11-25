@@ -4,21 +4,21 @@ using NGPlusPlus.Interfaces;
 using NGPlusPlus.StatsNamespace;
 
 namespace NGPlusPlus.Data {
-    public class Spider : IEnemyTemplate 
+    public class SpiderTemplate : IEnemyTemplate 
     {
-        public Spider(int level)
+        public SpiderTemplate(int level)
         {
             ExperienceGiven = 5 * level;
 
             Stats = new Stats(
                 level,
-                health: 8 * level,
-                mana: 3 * level,
-                attack: 4 * level,
-                defense: 3 * level,
-                magicAttack: 5 * level,
-                magicDefense: 3 * level,
-                speed: 3 * level
+                health: 30 + (10 * level),
+                mana: 5 + level,
+                attack: 8 * level,
+                defense: 20 + 5 * level,
+                magicAttack: 3 * level,
+                magicDefense: 2 * level,
+                speed: 4 * level
             );
 
             Abilities = AbilityShop(level);
@@ -32,8 +32,8 @@ namespace NGPlusPlus.Data {
         {
             var abilities = new List<IAbility>
             {
-                new Damage("Attack", TargetType.Other, DamageType.Physical, 0, level, level),
-                new Damage("Strong Bite", TargetType.Other, DamageType.Physical, 0, level, level + (2 * level)),
+                new Damage("Attack", TargetType.Other, DamageType.Physical, 0, 100, 90),
+                new Damage("Strong Bite", TargetType.Other, DamageType.Physical, 0, 110, 80),
                 new Heal("Heal Self", TargetType.Self, 3 * level, level * 3),
                 new Debuff("Sticky Web", TargetType.Other, StatType.Speed, 3 * level, 999)
             };

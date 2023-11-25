@@ -5,11 +5,11 @@ using NGPlusPlus.PlayerNameSpace;
 
 namespace NGPlusPlus.GameScreens.Core
 {
-    internal class StatBox : IGameScreen
+    internal class StatBoxScreen : IGameScreen
     {
         private Player Player;
         public int AnimationSpeed => 300;
-        public StatBox()
+        public StatBoxScreen()
         {
             Player = Player.GetInstance();
         }

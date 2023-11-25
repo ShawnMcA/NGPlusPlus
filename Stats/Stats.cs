@@ -147,7 +147,10 @@ namespace NGPlusPlus.StatsNamespace
             if (stat.Current == stat.Max)
                 return;
 
-            int amountToRestore = (int)Math.Ceiling((double)stat.Max / fraction);
+            int amountToRestore = (int)Math.Floor((double)stat.Max / fraction);
+
+            if (amountToRestore < 1)
+                amountToRestore = 1;
 
             if(stat.Current > stat.Max)
             {

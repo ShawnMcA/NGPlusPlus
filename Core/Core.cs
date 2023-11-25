@@ -1,4 +1,5 @@
-﻿using NGPlusPlus.GameSettingsNamespace;
+﻿using NGPlusPlus.Enums;
+using NGPlusPlus.GameSettingsNamespace;
 using NGPlusPlus.PlayerNameSpace;
 using NGPlusPlus.SceneManagerNamespace;
 
@@ -15,25 +16,22 @@ namespace NGPlusPlus.Core {
             Player = Player.GetInstance();
         }
 
-        public static void StartGameLoop() 
+        public static bool StartGameLoop()
         {
-            SceneManager.PlayTitle();
-
-            SceneManager.PlayIntro();
-        }
-
-        public static bool RestartGame() 
-        {
-            var restart = "";
+            SceneManager.ResetSceneManager();
 
             do
             {
-                TextLogger.ClearWriteText("Would you like to start a new game?");
-                TextLogger.WriteText("y or n");
-                restart = Console.ReadLine();
-            } while (restart.ToLower() != "y" && restart.ToLower() != "n");
+                SceneManager.PlayNextScene();
 
-            return restart.ToLower() == "y";
+            } while (CheckContinuePlaying());
+
+            return RestartSceneManager.RestartGame();
+        }
+
+        private static bool CheckContinuePlaying()
+        {
+            return !SceneManager.IsFinalScene() && (!Player.Stats?.IsDead() ?? true);
         }
     }
 }

@@ -5,39 +5,57 @@ using NGPlusPlus.GameScreensNamespace;
 using NGPlusPlus.PlayerNameSpace;
 using NGPlusPlus.ScreenRendererNamespace;
 using NGPlusPlus.BattleManagerNamespace;
-using NGPlusPlus.Interfaces;
 using NGPlusPlus.EnemyNameSpace;
+using NGPlusPlus.Interfaces;
+using NGPlusPlus.MiscClasses;
+using System.Numerics;
 
 namespace NGPlusPlus.SceneManagerNamespace
 {
     internal static class BattleSceneManager
     {
         public static bool StartBattle(EnemyType enemyType, 
-            string enemyName, 
-            int enemyLevel,
+            string name, 
+            int level,
             bool isAmbushed
             ) 
-        { 
-            var enemy = new Enemy(enemyType, enemyName, enemyLevel);
-            var screen = EnemyTemplateManager.GetEnemyGameScreen(enemy);
+        {
+            var enemyPackage = EnemyTemplateManager.GenerateEnemyPackage(enemyType, name, level);
 
-            var battleManager = new BattleManager(enemy, screen, isAmbushed);
+            BattleScreenRenderer.RenderFightScreen(enemyPackage.EnemyScreen);
 
-            return battleManager.StartCoreLoop();
+            var battleManager = new BattleManager(enemyPackage, isAmbushed);
+
+            var battleWon = battleManager.StartCoreLoop();
+
+            HandleBattleWon(battleWon, enemyPackage);
+
+            return battleWon;
         }
 
-        public static void PlayBattleWon()
+        public static void RerenderEnemy(EnemyPackage enemyPackage)
         {
-            var battleWon = new BattleWon();
+            BattleScreenRenderer.RenderEnemyAnimation(enemyPackage.EnemyScreen);
+        }
+
+        public static void RerenderStats()
+        {
+            BattleScreenRenderer.RenderStatBox();
+        }
+
+        public static void PlayBattleWon(EnemyPackage enemyPackage)
+        {
+            var battleWon = new BattleWonScreen();
             ScreenRenderer.RenderAnimation(battleWon);
+            TextLogger.ClearWriteTextAndWait($"You've managed to defeat {enemyPackage.Enemy.Name} and gained {enemyPackage.Enemy.ExperienceGiven} experience.");
 
             var player = Player.GetInstance();
-            player.ResetPlayer();
+            player.GainExperience(enemyPackage.Enemy.ExperienceGiven);
         }
 
         public static void PlayGameOver()
         {
-            var gameOver = new GameOver();
+            var gameOver = new GameOverScreen();
 
             ScreenRenderer.RenderAnimation(gameOver);
 
@@ -45,6 +63,13 @@ namespace NGPlusPlus.SceneManagerNamespace
 
             var player = Player.GetInstance();
             player.ResetPlayer();
+        }
+        public static void HandleBattleWon(bool battleWon, EnemyPackage enemyPackage)
+        {
+            if (battleWon)
+                PlayBattleWon(enemyPackage);
+            else
+                PlayGameOver();
         }
     }
 }

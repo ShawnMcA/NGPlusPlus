@@ -14,7 +14,7 @@ namespace NGPlusPlus.Interfaces
         public List<IAbility> Abilities { get; }
         public void Defend();
         public int CalculateBattleSpeed();
-        public int CalculateDamageOutput(int rangeLow, int rangeHigh, DamageType damageType);
+        public int CalculateDamageOutput(int baseDamage, int accuracy, DamageType damageType);
 
         public void TakeDamage(int enemyAttack, DamageType damageType);
 

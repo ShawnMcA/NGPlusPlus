@@ -1,25 +1,21 @@
 ﻿using NGPlusPlus.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NGPlusPlus.GameScreens.Scenes
 {
-    internal class Intro : IGameScreen
+    internal class IntroScreen : IGameScreen
     {
         public int AnimationSpeed => 300;
         public List<List<string>> AnimationPackage()
         {
-            var package = new List<List<string>>();
-
-            package.Add(Screen1());
-            package.Add(Screen2());
-            package.Add(Screen3());
-            package.Add(Screen4());
-            package.Add(Screen5());
-            package.Add(Screen6());
+            var package = new List<List<string>>
+            {
+                Screen1(),
+                Screen2(),
+                Screen3(),
+                Screen4(),
+                Screen5(),
+                Screen6()
+            };
 
             return package;
         }
