@@ -32,11 +32,16 @@ namespace NGPlusPlus.SceneManagerNamespace
             TextLogger.ClearWriteTextAndWait("???: Either way, it’s good to have you here.");
             TextLogger.ClearWriteTextAndWait("???: It’s been pretty lonely here lately...");
             TextLogger.ClearWriteTextAndWait("???: I almost forgot. You probably want to know who I am.");
+
+            var npc1Screen = new Npc1Screen();
+            ScreenRenderer.RenderAnimation(npc1Screen);
             TextLogger.ClearWriteTextAndWait($"{CharacterNames.NPC1}: My name is {CharacterNames.NPC1}. I think at least...");
             TextLogger.ClearWriteTextAndWait($"{CharacterNames.NPC1}: Nevertheless, you're probably tired.");
             TextLogger.ClearWriteTextAndWait($"{CharacterNames.NPC1}: I have a spare room upstairs. You'd better stay here for the night.");
             TextLogger.ClearWriteTextAndWait($"{CharacterNames.NPC1}: Just watch out for {CharacterNames.NPC1sPet}. He can be a little cranky...");
             TextLogger.ClearWriteTextAndWait($"{CharacterNames.NPC1}: Anyway, hope you sleep well...");
+
+            SceneManager.PlayMiscScene(MiscScenes.Blank);
             TextLogger.ClearWriteTextAndWait("(You head upstairs for your room.)");
         }
 

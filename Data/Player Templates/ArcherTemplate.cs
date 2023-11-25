@@ -33,8 +33,8 @@ namespace NGPlusPlus.Data
         {
             var abilities = new List<IAbility>
             {
-                new Damage("Weak Shot", TargetType.Other, DamageType.Physical, 0, 1, 95),
-                new Buff("Attack Up", TargetType.Self, StatType.Attack, 2 * level, 2 * level)
+                new Damage("Weak Shot", TargetType.Other, DamageType.Physical, 0, 100, 95),
+                new Buff("Attack Up", TargetType.Self, StatType.Attack, 2 + level, 10)
             };
 
             if (level >= 3)

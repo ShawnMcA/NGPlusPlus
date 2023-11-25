@@ -39,6 +39,7 @@ namespace NGPlusPlus.SceneManagerNamespace
                 case Scenes.Intro: IntroSceneManager.PlayIntro(); break;
                 case Scenes.BedroomStart: BedroomSceneManager.PlayBedroomStart(); break;
                 case Scenes.BedroomAfter: BedroomSceneManager.PlayBedroomAfter(); break;
+                   
                 default: break;
             }
         }
@@ -47,6 +48,7 @@ namespace NGPlusPlus.SceneManagerNamespace
         {
             switch (scene)
             {
+                case MiscScenes.Blank: MiscSceneManager.PlayBlank(); break;
                 default: break;
             }
         }

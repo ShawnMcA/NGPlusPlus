@@ -4,6 +4,7 @@ using NGPlusPlus.PlayerNameSpace;
 using NGPlusPlus.ScreenRendererNamespace;
 using NGPlusPlus.GameScreens.Scenes;
 using NGPlusPlus.Data;
+using NGPlusPlus.GameScreensNamespace;
 
 namespace NGPlusPlus.SceneManagerNamespace
 {
@@ -11,9 +12,9 @@ namespace NGPlusPlus.SceneManagerNamespace
     {
         public static void PlayBedroomStart()
         {
-            var intro = new IntroScreen();
+            var bedroomScreen = new BedroomScreen();
+            ScreenRenderer.RenderAnimation(bedroomScreen);
 
-            ScreenRenderer.RenderAnimation(intro);
             var player = Player.GetInstance();
 
             TextLogger.ClearWriteTextAndWait($"{player.Name}: Man, this place is pretty... (Worn down? Dirty? Small?)");
@@ -30,17 +31,18 @@ namespace NGPlusPlus.SceneManagerNamespace
 
         public static void PlayBedroomAfter()
         {
-            var intro = new IntroScreen();
 
-            ScreenRenderer.RenderAnimation(intro);
             var player = Player.GetInstance();
-
+            SceneManager.PlayMiscScene(MiscScenes.Blank);
             TextLogger.ClearWriteTextAndWait($"{player.Name}: Well...");
             TextLogger.ClearWriteTextAndWait($"{player.Name}: That probably wasn't good...");
+            var angryNpcScreen = new AngryNpc1Screen();
+            ScreenRenderer.RenderAnimation(angryNpcScreen);
             TextLogger.ClearWriteTextAndWait($"{CharacterNames.NPC1}: WHAT THE HELL DID YOU DO TO {CharacterNames.NPC1sPet.ToUpper()}?!?");
             TextLogger.ClearWriteTextAndWait($"{CharacterNames.NPC1}: I CANNOT BELIEVE YOU RIGHT NOW...");
             TextLogger.ClearWriteTextAndWait($"{CharacterNames.NPC1}: GET OUT!!!");
             TextLogger.ClearWriteTextAndWait($"{CharacterNames.NPC1}: (Worst toilet paper salesperson ever... Jeez)");
+            SceneManager.PlayMiscScene(MiscScenes.Blank);
             TextLogger.ClearWriteTextAndWait($"(You hand over what's left of {CharacterNames.NPC1sPet} and head out.)");
         }
     }

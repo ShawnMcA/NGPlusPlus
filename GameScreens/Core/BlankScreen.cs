@@ -1,13 +1,8 @@
 ﻿using NGPlusPlus.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NGPlusPlus.GameScreensNamespace
 {
-    internal class TemplateScreen : IGameScreen
+    internal class BlankScreen : IGameScreen
     {
         public int AnimationSpeed => 300;
         public List<List<string>> AnimationPackage()
