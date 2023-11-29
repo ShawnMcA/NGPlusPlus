@@ -4,7 +4,7 @@ using NGPlusPlus.Enums;
 using NGPlusPlus.Interfaces;
 using NGPlusPlus.MiscClasses;
 using NGPlusPlus.PlayerNameSpace;
-using NGPlusPlus.SceneManagerNamespace;
+using NGPlusPlus.SceneManager.Core;
 
 namespace NGPlusPlus.BattleManagerNamespace
 {

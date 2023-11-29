@@ -1,5 +1,4 @@
-﻿using NGPlusPlus.Enums;
-using NGPlusPlus.GameSettingsNamespace;
+﻿using NGPlusPlus.GameSettingsNamespace;
 using NGPlusPlus.PlayerNameSpace;
 using NGPlusPlus.SceneManagerNamespace;
 
@@ -7,6 +6,8 @@ namespace NGPlusPlus.Core {
     public static class Core {
 
         private static Player Player;
+
+        private static int SceneSkip = 3;
 
         public static void InitializeGameSettings()
         {
@@ -16,22 +17,11 @@ namespace NGPlusPlus.Core {
             Player = Player.GetInstance();
         }
 
-        public static bool StartGameLoop()
+        public static void StartGameLoop()
         {
-            SceneManager.ResetSceneManager();
-
-            do
-            {
-                SceneManager.PlayNextScene();
-
-            } while (CheckContinuePlaying());
-
-            return RestartSceneManager.RestartGame();
+            CoreSceneManager.PlayChapters(Player, SceneSkip);
         }
 
-        private static bool CheckContinuePlaying()
-        {
-            return !SceneManager.IsFinalScene() && (!Player.Stats?.IsDead() ?? true);
-        }
+        
     }
 }

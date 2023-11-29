@@ -32,7 +32,7 @@ namespace NGPlusPlus.PlayerNameSpace
         #endregion "Properties"
 
         #region "Initialization"
-        public void InitializePlayer(string name, PlayerClass playerClass)
+        public void InitializePlayer(string name = "Test Player", PlayerClass playerClass = PlayerClass.Knight)
         {
             if (!string.IsNullOrEmpty(Name)) // Player already initialized
                 return;

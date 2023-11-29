@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NGPlusPlus.GameScreensNamespace
+namespace NGPlusPlus.GameScreens.Core
 {
     internal class TitleScreen : IGameScreen
     {
@@ -19,8 +19,8 @@ namespace NGPlusPlus.GameScreensNamespace
             return package;
         }
 
-        public List<string> Screen1() 
-        { 
+        public List<string> Screen1()
+        {
             var screen = new List<string>();
 
             screen.Add("                                                                                                                ");

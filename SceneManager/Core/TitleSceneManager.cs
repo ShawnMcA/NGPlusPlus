@@ -1,12 +1,18 @@
 ﻿using NGPlusPlus.Core;
-using NGPlusPlus.GameScreensNamespace;
+using NGPlusPlus.GameScreens.Core;
+using NGPlusPlus.Interfaces;
 using NGPlusPlus.ScreenRendererNamespace;
 
 namespace NGPlusPlus.SceneManagerNamespace
 {
-    internal static class TitleSceneManager
+    internal class TitleSceneManager: IStorySceneManager
     {
-        public static void PlayTitle()
+        public void PlaySet() 
+        {
+            PlayTitle();
+        }
+
+        public void PlayTitle()
         {
             var titleScreen = new TitleScreen();
 

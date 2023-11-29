@@ -31,12 +31,7 @@ namespace NGPlusPlus.Core {
 
             Core.InitializeGameSettings();
 
-            var isPlaying = true;
-
-            do
-            {
-                isPlaying = Core.StartGameLoop();
-            } while (isPlaying);
+            Core.StartGameLoop();
         }
     }
 }

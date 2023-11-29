@@ -9,16 +9,17 @@ using NGPlusPlus.EnemyNameSpace;
 using NGPlusPlus.Interfaces;
 using NGPlusPlus.MiscClasses;
 using System.Numerics;
+using NGPlusPlus.GameScreens.Core;
 
-namespace NGPlusPlus.SceneManagerNamespace
+namespace NGPlusPlus.SceneManager.Core
 {
     internal static class BattleSceneManager
     {
-        public static bool StartBattle(EnemyType enemyType, 
-            string name, 
+        public static bool StartBattle(EnemyType enemyType,
+            string name,
             int level,
             bool isAmbushed
-            ) 
+            )
         {
             var enemyPackage = EnemyTemplateManager.GenerateEnemyPackage(enemyType, name, level);
 
